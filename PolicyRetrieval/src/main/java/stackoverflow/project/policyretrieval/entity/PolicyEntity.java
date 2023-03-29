@@ -33,4 +33,52 @@ public class PolicyEntity {
             joinColumns = {@JoinColumn(name = "policy_id", referencedColumnName = "policy_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
     private List<PolicyEntity> tags;
+
+    public int getPolicyId() {
+        return policyId;
+    }
+
+    public void setPolicyId(int policyId) {
+        this.policyId = policyId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public List<PolicyEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<PolicyEntity> tags) {
+        this.tags = tags;
+    }
 }
