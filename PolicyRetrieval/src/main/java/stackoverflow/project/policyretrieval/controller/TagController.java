@@ -1,8 +1,10 @@
 package stackoverflow.project.policyretrieval.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.TagEntity;
 import stackoverflow.project.policyretrieval.repository.TagRepository;
+import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
@@ -10,54 +12,51 @@ import java.util.List;
 @RequestMapping("/api/tag")
 public class TagController {
 
-    private final TagRepository repository;
-
-    public TagController(TagRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private  TagRepository repository;
 
     @PostMapping("/add/{tagName}/{groupBelong}")
-    public String addTag(@PathVariable("tagName") String tagName,
-                         @PathVariable("groupBelong") int groupBelong){
+    public ResponseUtil addTag(@PathVariable("tagName") String tagName,
+                               @PathVariable("groupBelong") int groupBelong){
         // if not exist then return exception
         // else
         TagEntity tag = new TagEntity();
         tag.setTagName(tagName);
         tag.setGroupBelong(groupBelong);
         repository.save(tag);
-        return "添加成功！";
+        return ResponseUtil.successMessage("添加成功！");
     }
 
     @PostMapping("/delete/{tagId}")
-    public String deleteTag(@PathVariable("tagId") int tagId){
+    public ResponseUtil deleteTag(@PathVariable("tagId") int tagId){
         // if not exist then return exception
         // else
         repository.deleteById(tagId);
-        return "删除成功！";
+        return ResponseUtil.successMessage("删除成功！");
     }
 
     @PostMapping("/update/{tagId}/{tagName}/{groupBelong}")
-    public String updateTag(@PathVariable("tagId") int tagId,
-                            @PathVariable("tagName") String tagName,
-                            @PathVariable("groupBelong") int groupBelong){
+    public ResponseUtil updateTag(@PathVariable("tagId") int tagId,
+                                  @PathVariable("tagName") String tagName,
+                                  @PathVariable("groupBelong") int groupBelong){
         // if not exist then return exception
         // else
         TagEntity tag = repository.getReferenceById(tagId);
         tag.setTagName(tagName);
         tag.setGroupBelong(groupBelong);
         repository.save(tag);
-        return "更新成功！";
+        return ResponseUtil.successMessage("更新成功！");
     }
 
     @GetMapping("/getall")
-    public List<TagEntity> getAllTags(){
+    public ResponseUtil<List<TagEntity>> getAllTags(){
 
-        return repository.findAll();
+        return ResponseUtil.success(repository.findAll());
     }
 
     @GetMapping("/getbyname/{tagName}")
-    public List<TagEntity> getTagByName(@PathVariable("tagName") String tagName){
+    public ResponseUtil<List<TagEntity>> getTagByName(@PathVariable("tagName") String tagName){
         // if Tag.getProfile(tagName) is not None Then
-        return repository.findTagByTagName(tagName);
+        return ResponseUtil.success(repository.findTagByTagName(tagName));
     }
 }
