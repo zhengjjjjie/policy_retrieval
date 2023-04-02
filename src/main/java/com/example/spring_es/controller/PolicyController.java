@@ -21,6 +21,14 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
+    //政策添加
+    @PostMapping("/add")
+    public String addPolicy(@RequestBody PolicyEntity policy) {
+        policyService.addPolicy(policy);
+        return "添加成功";
+    }
+
+
     // 在ES中搜索
     @GetMapping("/search/title")
     public List<Policy> searchTitle(String key)
