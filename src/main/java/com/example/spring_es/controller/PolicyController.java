@@ -5,10 +5,6 @@ import com.example.spring_es.model.Policy;
 import com.example.spring_es.model.PolicyEntity;
 import com.example.spring_es.service.PolicyService;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,21 +29,12 @@ public class PolicyController {
     @GetMapping("/search/title")
     public List<Policy> searchTitle(String key)
     {
-        try {
-            String keyword = URLDecoder.decode(key,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("无法解析");
-            return null;
-        }
         return policyService.searchTitle(key);
     }
     @GetMapping("/search/pubagency/{keyword}")
     public List<Policy> searchAgency(@PathVariable("keyword") String key) {
-        System.out.println(key);
-        List<Policy> list = policyService.searchAngency(key);
         /* 精细搜索 */
-
-        return list;
+        return policyService.searchAngency(key);
     }
 
 
