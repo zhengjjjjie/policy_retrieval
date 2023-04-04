@@ -1,5 +1,6 @@
 package stackoverflow.project.policyretrieval.controller;
 
+
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -51,6 +52,7 @@ public class PolicyController {
             policyService.addPolicy(savePolicy);
         } catch (Exception e) {
             log.error(String.format("ERROR: can not to update Policy %s",e.getMessage()));
+
         }
         return ResponseUtil.successMessage("update success");
     }
@@ -69,4 +71,5 @@ public class PolicyController {
 //        repository.save(policyEntity);
 //        return ResponseUtil.successMessage("修改成功");
 //    }
+
 }

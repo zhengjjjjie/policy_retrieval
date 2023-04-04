@@ -4,7 +4,10 @@ public class ResponseUtil<E> {
 
     private int code;
     private String msg;
+
+    private final String version = "v0.1.0";
     private E data;
+
 
     public int getCode() {
         return code;
