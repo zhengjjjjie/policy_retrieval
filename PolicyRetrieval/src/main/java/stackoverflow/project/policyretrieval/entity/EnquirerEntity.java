@@ -25,13 +25,13 @@ public class EnquirerEntity extends UserEntity{
     @ManyToMany(targetEntity = PolicyEntity.class)
     @JoinTable(name = "collection",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "policy_id", referencedColumnName = "policy_id")})
+            inverseJoinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")})
     private List<PolicyEntity> collection;
 
     @ManyToMany(targetEntity = PolicyEntity.class)
     @JoinTable(name = "history",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "policy_id", referencedColumnName = "policy_id")})
+            inverseJoinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")})
     private List<PolicyEntity> history;
 
     @ManyToMany(targetEntity = TagEntity.class)
