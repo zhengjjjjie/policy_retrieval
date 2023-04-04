@@ -1,74 +1,72 @@
 package stackoverflow.project.policyretrieval.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
-
-import java.util.List;
+import lombok.Data;
 
 @Entity
-@Table(name = "policy")
+@Data
+@Table(name = "POLICY")
 public class PolicyEntity {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Column(name = "id", nullable = false)
     private Integer Id;
 
     @Basic
-    @Column(name = "POLICYID")
+    @Column(name = "POLICYID",columnDefinition = "text")
     private String policyId;
 
     @Basic
-    @Column(name = "POLICYTITLE")
+    @Column(name = "POLICYTITLE",columnDefinition = "text")
     private String policyTitle;
 
     @Basic
-    @Column(name = "POLICYGRADE")
+    @Column(name = "POLICYGRADE",columnDefinition = "text")
     private String policyGrade;
 
     @Basic
-    @Column(name = "PUBAGENCYID")
+    @Column(name = "PUBAGENCYID",columnDefinition = "text")
     private String pubAgencyId;
 
     @Basic
-    @Column(name = "PUBAGENCY")
+    @Column(name = "PUBAGENCY",columnDefinition = "text")
     private String PubAgency;
 
     @Basic
-    @Column(name = "PUBAGENCYFULLNAME")
+    @Column(name = "PUBAGENCYFULLNAME",columnDefinition = "text")
     private String pubAgencyFullName;
 
     @Basic
-    @Column(name = "PUBNUMBER")
+    @Column(name = "PUBNUMBER",columnDefinition = "text")
     private String pubNumber;
 
     @Basic
-    @Column(name = "PUBTIME")
+    @Column(name = "PUBTIME",columnDefinition = "text")
     private String pubTime;
 
     @Basic
-    @Column(name = "POLICYTYPE")
+    @Column(name = "POLICYTYPE",columnDefinition = "text")
     private String policyType;
 
     @Basic
-    @Column(name = "POLICYBODY")
+    @Column(name = "POLICYBODY",columnDefinition = "longtext")
     private String policyBody;
 
     @Basic
-    @Column(name = "PROVINCE")
+    @Column(name = "PROVINCE",columnDefinition = "text")
     private String province;
 
     @Basic
-    @Column(name = "CITY")
+    @Column(name = "CITY",columnDefinition = "text")
     private String city;
 
     @Basic
-    @Column(name = "POLICYSOURCE")
+    @Column(name = "POLICYSOURCE",columnDefinition = "text")
     private String policySource;
 
     @Basic
-    @Column(name = "UPDATEDATE")
+    @Column(name = "UPDATEDATE",columnDefinition = "text")
     private String updateDate;
 
 //    @Basic
