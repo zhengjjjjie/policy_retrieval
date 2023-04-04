@@ -1,7 +1,6 @@
 package stackoverflow.project.policyretrieval.entity;
 
 import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -13,7 +12,7 @@ import javax.persistence.Id;
 @Document(indexName = "art")
 public class ESPolicyEntity {
     @Id
-//    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text)
     private Integer id;
 
     @Field(name ="POLICYID")
