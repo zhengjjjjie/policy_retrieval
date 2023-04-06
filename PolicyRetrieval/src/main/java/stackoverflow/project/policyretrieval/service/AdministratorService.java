@@ -6,6 +6,7 @@ import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import java.util.List;
 
 public interface AdministratorService {
+    ResponseUtil<String> login(AdministratorEntity administratorEntity);
     ResponseUtil<String> add(AdministratorEntity administratorEntity);
 
     ResponseUtil<String> delete(int id);

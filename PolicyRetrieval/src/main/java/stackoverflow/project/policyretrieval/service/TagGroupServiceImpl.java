@@ -1,10 +1,12 @@
 package stackoverflow.project.policyretrieval.service;
 
+import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.TagEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
+@Service
 public class TagGroupServiceImpl implements TagService{
     @Override
     public ResponseUtil<String> add(TagEntity tag) {
