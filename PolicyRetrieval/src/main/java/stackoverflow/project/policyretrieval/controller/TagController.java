@@ -1,6 +1,7 @@
 package stackoverflow.project.policyretrieval.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.TagEntity;
 import stackoverflow.project.policyretrieval.service.TagService;
@@ -20,9 +21,9 @@ public class TagController {
         return tagService.add(tagEntity);
     }
 
-    @PostMapping("/delete/{tagId}")
-    public ResponseUtil<String> deleteTag(@PathVariable("tagId") int tagId){
-        return ResponseUtil.successMessage("删除成功！");
+    @PostMapping("/delete/{id}")
+    public ResponseUtil<String> deleteTag(@PathVariable("id") int id){
+        return tagService.delete(id);
     }
 
     @PostMapping("/update")

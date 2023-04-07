@@ -10,7 +10,7 @@ public interface TagService{
 
     ResponseUtil<String> delete(int id);
 
-    ResponseUtil<String> update(TagEntity tag);
+    ResponseUtil<String> update(TagEntity tagEntity);
 
     ResponseUtil<List<TagEntity>> getAll();
     ResponseUtil<List<TagEntity>> getByName(String tagName);

@@ -4,6 +4,7 @@ package stackoverflow.project.policyretrieval.controller;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -17,16 +18,12 @@ import java.util.List;
 @RequestMapping("/api/policy")
 public class PolicyController {
 
-    private final PolicyService policyService;
-
-    public PolicyController(PolicyService policyService) {
-        this.policyService = policyService;
-    }
+    @Autowired
+    private PolicyService policyService;
 
     @PostMapping("/add")
     public ResponseUtil<String> addPolicy(@RequestBody PolicyEntity policy){
-        policyService.addPolicy(policy);
-        return  ResponseUtil.successMessage("添加成功！");
+        return policyService.addPolicy(policy);
     }
     @GetMapping("/search/{title}")
     public ResponseUtil<List<ESPolicyEntity>> searchByTitle(@PathVariable("title") String keyword) {
@@ -52,27 +49,11 @@ public class PolicyController {
             policyService.addPolicy(savePolicy);
         } catch (Exception e) {
             log.error(String.format("ERROR: can not to update Policy %s",e.getMessage()));
-
         }
         return ResponseUtil.successMessage("update success");
     }
     //TODO:添加标签
     //TODO:查找不同政策占比
     //TODO:热点推荐
-//    @PostMapping("/update")
-//    public ResponseUtil<String> updatePolicy(@RequestBody PolicyEntity policy){
-//        if(!repository.findById(policy.getPolicyId()).isPresent()){
-//            return ResponseUtil.failMessage("政策不存在！");
-//        }
-//        PolicyEntity policyEntity = repository.getReferenceById(policy.getPolicyId());
-//        policyEntity.setPolicyId(policy.getPolicyId());
-//        policyEntity.setTitle(policy.getTitle());
-//        policyEntity.setContent(policy.getContent());
-//        policyEntity.setDate(policy.getDate());
-//        policyEntity.setLink(policy.getLink());
-//        policyEntity.setTags(policy.getTags());
-//        repository.save(policyEntity);
-//        return ResponseUtil.successMessage("修改成功");
-//    }
 
 }

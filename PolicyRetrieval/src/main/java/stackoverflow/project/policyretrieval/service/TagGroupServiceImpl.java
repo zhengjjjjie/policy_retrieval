@@ -2,14 +2,16 @@ package stackoverflow.project.policyretrieval.service;
 
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.TagEntity;
+import stackoverflow.project.policyretrieval.entity.TagGroupEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
 @Service
-public class TagGroupServiceImpl implements TagService{
+public class TagGroupServiceImpl implements TagGroupService{
+
     @Override
-    public ResponseUtil<String> add(TagEntity tag) {
+    public ResponseUtil<String> add(TagGroupEntity tagGroupEntity) {
         return null;
     }
 
@@ -19,17 +21,17 @@ public class TagGroupServiceImpl implements TagService{
     }
 
     @Override
-    public ResponseUtil<String> update(TagEntity tag) {
+    public ResponseUtil<String> update(TagGroupEntity tagGroupEntity) {
         return null;
     }
 
     @Override
-    public ResponseUtil<List<TagEntity>> getAll() {
+    public ResponseUtil<List<TagGroupEntity>> getAll() {
         return null;
     }
 
     @Override
-    public ResponseUtil<List<TagEntity>> getByName(String tagName) {
+    public ResponseUtil<List<TagGroupEntity>> getByName(String tagGroupName) {
         return null;
     }
 }

@@ -13,4 +13,6 @@ public interface TagGroupService {
     ResponseUtil<String> update(TagGroupEntity tagGroupEntity);
 
     ResponseUtil<List<TagGroupEntity>> getAll();
+
+    ResponseUtil<List<TagGroupEntity>> getByName(String tagGroupName);
 }

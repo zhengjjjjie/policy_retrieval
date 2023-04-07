@@ -26,17 +26,21 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public ResponseUtil<String> update(TagEntity tag) {
-        return null;
+    public ResponseUtil<String> update(TagEntity tagEntity) {
+       TagEntity tag = tagRepository.getReferenceById(tagEntity.getTagId());
+       tag.setTagName(tagEntity.getTagName());
+       tag.setGroupBelong(tag.getGroupBelong());
+       tagRepository.save(tag);
+       return ResponseUtil.successMessage("更新成功！");
     }
 
     @Override
     public ResponseUtil<List<TagEntity>> getAll() {
-        return null;
+        return ResponseUtil.success(tagRepository.findAll());
     }
 
     @Override
     public ResponseUtil<List<TagEntity>> getByName(String tagName) {
-        return null;
+        return ResponseUtil.success(tagRepository.findTagByTagName(tagName));
     }
 }

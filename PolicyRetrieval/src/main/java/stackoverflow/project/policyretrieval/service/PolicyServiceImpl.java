@@ -8,6 +8,7 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
+import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class PolicyServiceImpl implements PolicyService{
         this.transactionTemplate = transactionTemplate;
     }
     @Override
-    public void addPolicy(PolicyEntity policy) {
+    public ResponseUtil<String> addPolicy(PolicyEntity policy) {
 
         // 实现事物控制, 无状态且线性安全
         final PolicyEntity savePolicy = transactionTemplate.execute(status ->
@@ -42,6 +43,7 @@ public class PolicyServiceImpl implements PolicyService{
         } catch (Exception e) {
             log.error(String.format("ERROR: can not to save ESPolicy %s",e.getMessage()));
         }
+        return ResponseUtil.successMessage("添加成功！");
     }
     @Override
     public List<ESPolicyEntity> searchTitle(String keyword){
