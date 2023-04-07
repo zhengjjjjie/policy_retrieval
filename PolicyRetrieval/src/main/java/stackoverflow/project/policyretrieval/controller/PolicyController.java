@@ -38,9 +38,8 @@ public class PolicyController {
     // 其不具有update功能, 本质是就是先删除后添加
     // 只需要保证两个document的Id相同, 就能实现更新操作
     @PostMapping("/update/title/{id}")
-    public ResponseUtil<String> updateTitle(
-            @PathVariable("id") String id,
-            @RequestBody String title){
+    public ResponseUtil<String> updateTitle(@PathVariable("id") String id,
+                                            @RequestBody String title){
         try {
             ESPolicyEntity updatePolicy = policyService.searchByPolicyId(id);
             updatePolicy.setPolicyTitle(title);
@@ -52,7 +51,7 @@ public class PolicyController {
         }
         return ResponseUtil.successMessage("update success");
     }
-    //TODO:添加标签
+
     //TODO:查找不同政策占比
     //TODO:热点推荐
 
