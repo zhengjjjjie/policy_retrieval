@@ -12,10 +12,10 @@ import javax.persistence.Id;
 @Document(indexName = "art")
 public class ESPolicyEntity {
     @Id
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Integer)
     private Integer id;
 
-    @Field(name ="POLICYID")
+    @Field(name ="POLICYID",type = FieldType.Text)
     private String policyId;
     @Field(name = "POLICYTITLE", analyzer = "ik_max_word")
     private String policyTitle;
