@@ -1,5 +1,9 @@
 package stackoverflow.project.policyretrieval.view;
 
-public class AdministratorView {
+import lombok.Data;
 
+@Data
+public class AdministratorView {
+    private String username;
+    private String nickname;
 }

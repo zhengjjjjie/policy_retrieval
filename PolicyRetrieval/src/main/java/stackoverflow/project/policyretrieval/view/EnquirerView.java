@@ -1,16 +1,13 @@
 package stackoverflow.project.policyretrieval.view;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-
-public class EnquirerView {
-    @JsonView(EnquirerView.Public.class)
-    public String name;
-
-    @JsonView(EnquirerView.Internal.class)
-    public String password;
-
-    public static class Public {}
-    public static class Internal extends Public {}
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class EnquirerView extends LoginView{
+    private String nickname;
+    private int age;
+    private String gender;
+    private String politicsStatus;
 }
