@@ -1,7 +1,6 @@
 package stackoverflow.project.policyretrieval.service;
 
 import org.springframework.stereotype.Service;
-import stackoverflow.project.policyretrieval.entity.TagEntity;
 import stackoverflow.project.policyretrieval.entity.TagGroupEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 

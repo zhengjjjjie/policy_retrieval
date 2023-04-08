@@ -3,7 +3,8 @@ package stackoverflow.project.policyretrieval.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 @Entity

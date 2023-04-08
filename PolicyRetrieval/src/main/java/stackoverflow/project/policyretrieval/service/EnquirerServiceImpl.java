@@ -1,13 +1,15 @@
 package stackoverflow.project.policyretrieval.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
@@ -58,8 +60,8 @@ public class EnquirerServiceImpl implements EnquirerService{
     }
 
     @Override
-    public ResponseUtil<List<EnquirerEntity>> getAll() {
-        return ResponseUtil.success(enquirerRepository.findAll());
+    public ResponseUtil<Page<EnquirerEntity>> getAll(Pageable pageable) {
+        return ResponseUtil.success(enquirerRepository.findAll(pageable));
     }
 
     @Override

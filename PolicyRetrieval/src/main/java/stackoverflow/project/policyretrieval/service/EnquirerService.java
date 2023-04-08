@@ -1,9 +1,11 @@
 package stackoverflow.project.policyretrieval.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
@@ -16,7 +18,7 @@ public interface EnquirerService {
 
     ResponseUtil<String> update(EnquirerEntity enquirerEntity);
 
-    ResponseUtil<List<EnquirerEntity>> getAll();
+    ResponseUtil<Page<EnquirerEntity>> getAll(Pageable pageable);
 
     ResponseUtil<EnquirerView> getByUsername(String username);
 
