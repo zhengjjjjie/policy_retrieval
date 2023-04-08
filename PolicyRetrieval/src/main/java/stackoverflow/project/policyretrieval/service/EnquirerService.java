@@ -3,11 +3,12 @@ package stackoverflow.project.policyretrieval.service;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
 
 public interface EnquirerService {
-    ResponseUtil<String> login(EnquirerEntity enquirerEntity);
+    ResponseUtil<String> login(LoginView loginView);
     ResponseUtil<String> add(EnquirerEntity enquirerEntity);
 
     ResponseUtil<String> delete(int id);

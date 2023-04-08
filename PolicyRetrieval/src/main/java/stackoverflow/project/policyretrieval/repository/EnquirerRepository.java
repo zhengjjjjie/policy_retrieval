@@ -4,8 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
-import stackoverflow.project.policyretrieval.view.CollectionView;
-import stackoverflow.project.policyretrieval.view.HistoryView;
 
 import java.util.List;
 

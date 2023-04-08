@@ -5,18 +5,23 @@ import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.AdministratorEntity;
 import stackoverflow.project.policyretrieval.repository.AdministratorRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AdministratorServiceImpl implements AdministratorService{
     @Autowired
     private AdministratorRepository administratorRepository;
     @Override
-    public ResponseUtil<String> login(AdministratorEntity administratorEntity) {
-        return null;
+    public ResponseUtil<String> login(LoginView loginView) {
+        AdministratorEntity administrator = administratorRepository.findAdministratorEntitiesByUsername(loginView.getUsername());
+        if (!Objects.equals(administrator.getPassword(), loginView.getPassword())) {
+            return ResponseUtil.failMessage("登录失败！");
+        }
+        return ResponseUtil.successMessage("登录成功！");
     }
-
     @Override
     public ResponseUtil<String> add(AdministratorEntity administratorEntity) {
         administratorRepository.save(administratorEntity);

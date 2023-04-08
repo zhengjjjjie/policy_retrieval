@@ -2,13 +2,16 @@ package stackoverflow.project.policyretrieval.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import stackoverflow.project.policyretrieval.entity.AdministratorEntity;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class EnquirerServiceImpl implements EnquirerService{
@@ -17,8 +20,12 @@ public class EnquirerServiceImpl implements EnquirerService{
     @Autowired
     private PolicyRepository policyRepository;
     @Override
-    public ResponseUtil<String> login(EnquirerEntity enquirerEntity) {
-        return null;
+    public ResponseUtil<String> login(LoginView loginView) {
+        EnquirerEntity enquirer = enquirerRepository.findEnquirerEntityByUsername(loginView.getUsername());
+        if (!Objects.equals(enquirer.getPassword(), loginView.getPassword())) {
+            return ResponseUtil.failMessage("登录失败！");
+        }
+        return ResponseUtil.successMessage("登录成功！");
     }
 
     @Override
