@@ -1,8 +1,11 @@
 package stackoverflow.project.policyretrieval.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name = "tag_group")
 public class TagGroupEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,21 +15,5 @@ public class TagGroupEntity {
     @Basic
     @Column(name = "tag_group_name", nullable = true, length = 50)
     private String tagGroupName;
-
-    public int getTagGroupId() {
-        return tagGroupId;
-    }
-
-    public void setTagGroupId(int tagGroupId) {
-        this.tagGroupId = tagGroupId;
-    }
-
-    public String getTagGroupName() {
-        return tagGroupName;
-    }
-
-    public void setTagGroupName(String tagGroupName) {
-        this.tagGroupName = tagGroupName;
-    }
 }
 
