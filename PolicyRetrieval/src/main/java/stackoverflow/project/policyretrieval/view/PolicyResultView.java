@@ -1,7 +1,6 @@
 package stackoverflow.project.policyretrieval.view;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 public class PolicyResultView{

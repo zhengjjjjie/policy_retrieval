@@ -1,12 +1,14 @@
 package stackoverflow.project.policyretrieval.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
@@ -36,8 +38,8 @@ public class EnquirerController {
     }
 
     @GetMapping("/getall")
-    public ResponseUtil<List<EnquirerEntity>> getAllEnquirers(){
-        return enquirerService.getAll();
+    public ResponseUtil<Page<EnquirerEntity>> getAllEnquirers(Pageable pageable){
+        return enquirerService.getAll(pageable);
     }
 
     @GetMapping("/getbyusername/{username}")

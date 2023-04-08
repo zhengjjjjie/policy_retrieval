@@ -1,9 +1,6 @@
 package stackoverflow.project.policyretrieval.view;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.beans.factory.annotation.Value;
-import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
 @Data
 public class PolicyInfoView {

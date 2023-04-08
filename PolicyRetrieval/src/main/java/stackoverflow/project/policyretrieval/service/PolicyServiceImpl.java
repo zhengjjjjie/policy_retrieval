@@ -12,11 +12,11 @@ import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.Map;
+
+import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convertPage;
 
 @Slf4j
 @Service
@@ -88,16 +88,20 @@ public class PolicyServiceImpl implements PolicyService{
     }
 
     @Override
-    public ResponseUtil<List<PolicyResultView>> searchByTitleKeyword(String titleKeyword) {
-        List<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(titleKeyword);
-        List<PolicyResultView> policyResultViews = esPolicyEntities.stream()
-                .map(obj -> new PolicyResultView(obj.getPolicyId(), obj.getPolicyTitle(), obj.getPubTime()))
-                .collect(Collectors.toList());
-        return ResponseUtil.success(policyResultViews);
+    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable, String titleKeyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(titleKeyword, pageable);
+        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        return ResponseUtil.success(policyInfoViews);
     }
 
     @Override
     public ResponseUtil<Page<ESPolicyEntity>> searchAll(Pageable pageable) {
         return ResponseUtil.success(esPolicyRepository.findAll(pageable));
+    }
+
+    @Override
+    public ResponseUtil<Map<String, Integer>> searchProportionByType() {
+
+        return null;
     }
 }
