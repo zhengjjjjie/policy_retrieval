@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
+import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class EnquirerController {
     @Autowired
     private EnquirerService enquirerService;
     @PostMapping("/login")
-    public ResponseUtil<String> login(@RequestBody EnquirerView enquirerView){
-        return enquirerService.login(enquirerView);
+    public ResponseUtil<String> login(@RequestBody LoginView loginView){
+        return enquirerService.login(loginView);
     }
     @PostMapping("/add")
     public ResponseUtil<String> addEnquirer(@RequestBody EnquirerEntity enquirerEntity){
@@ -40,7 +41,7 @@ public class EnquirerController {
     }
 
     @GetMapping("/getbyusername/{username}")
-    public ResponseUtil<EnquirerEntity> getEnquirerByUsername(@PathVariable String username){
+    public ResponseUtil<EnquirerView> getEnquirerByUsername(@PathVariable String username){
         return enquirerService.getByUsername(username);
     }
     @PostMapping("/addhistory/{enquirer_id}/{policy_id}")

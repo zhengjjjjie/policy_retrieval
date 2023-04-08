@@ -1,9 +1,14 @@
 package stackoverflow.project.policyretrieval.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "enquirer")
 public class EnquirerEntity extends UserEntity{
 
@@ -36,51 +41,4 @@ public class EnquirerEntity extends UserEntity{
             inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
     private List<PolicyEntity> tags;
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getPoliticsStatus() {
-        return politicsStatus;
-    }
-
-    public void setPoliticsStatus(String politicsStatus) {
-        this.politicsStatus = politicsStatus;
-    }
-
-    public List<PolicyEntity> getCollection() {
-        return collection;
-    }
-
-    public void setCollection(List<PolicyEntity> collection) {
-        this.collection = collection;
-    }
-
-    public List<PolicyEntity> getHistory() {
-        return history;
-    }
-
-    public void setHistory(List<PolicyEntity> history) {
-        this.history = history;
-    }
-
-    public List<PolicyEntity> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<PolicyEntity> tags) {
-        this.tags = tags;
-    }
 }

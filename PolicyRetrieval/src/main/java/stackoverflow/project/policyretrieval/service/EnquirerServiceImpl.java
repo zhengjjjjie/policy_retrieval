@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
+import stackoverflow.project.policyretrieval.view.LoginView;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,9 +20,9 @@ public class EnquirerServiceImpl implements EnquirerService{
     @Autowired
     private PolicyRepository policyRepository;
     @Override
-    public ResponseUtil<String> login(EnquirerView enquirerView) {
-        EnquirerEntity enquirer = enquirerRepository.findEnquirerEntityByUsername(enquirerView.getUsername());
-        if (!Objects.equals(enquirer.getPassword(), enquirerView.getPassword())) {
+    public ResponseUtil<String> login(LoginView loginView) {
+        EnquirerEntity enquirer = enquirerRepository.findEnquirerEntityByUsername(loginView.getUsername());
+        if (!Objects.equals(enquirer.getPassword(), loginView.getPassword())) {
             return ResponseUtil.failMessage("登录失败！");
         }
         return ResponseUtil.successMessage("登录成功！");
@@ -62,8 +63,16 @@ public class EnquirerServiceImpl implements EnquirerService{
     }
 
     @Override
-    public ResponseUtil<EnquirerEntity> getByUsername(String username) {
-        return ResponseUtil.success(enquirerRepository.findEnquirerEntityByUsername(username));
+    public ResponseUtil<EnquirerView> getByUsername(String username) {
+        EnquirerEntity enquirerEntity = enquirerRepository.findEnquirerEntityByUsername(username);
+        EnquirerView enquirerView = new EnquirerView();
+        enquirerView.setUsername(enquirerEntity.getUsername());
+        enquirerView.setPassword(enquirerEntity.getPassword());
+        enquirerView.setNickname(enquirerEntity.getPassword());
+        enquirerView.setAge(enquirerEntity.getAge());
+        enquirerView.setGender(enquirerEntity.getGender());
+        enquirerView.setPoliticsStatus(enquirerEntity.getPoliticsStatus());
+        return ResponseUtil.success(enquirerView);
     }
 
     @Override
