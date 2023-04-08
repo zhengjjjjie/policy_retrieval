@@ -55,7 +55,7 @@ public class PolicyController {
     //TODO:查找不同政策占比
     //TODO:热点推荐
 
-    @GetMapping("/new/{title}")
+    @GetMapping("/search/new/{title}")
     public ResponseUtil<List<ESPolicyEntity>> searchByGeo(@PathVariable("title") String keyword) {
         List<ESPolicyEntity> esPolicy = policyService.find(keyword);
         return ResponseUtil.success(esPolicy);
