@@ -1,19 +1,18 @@
 package stackoverflow.project.policyretrieval.controller;
 
 
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-
+import java.sql.ClientInfoStatus;
 import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/policy")
@@ -27,32 +26,38 @@ public class PolicyController {
         return policyService.addPolicy(policy);
     }
     @GetMapping("/search/{title}")
-    public ResponseUtil<List<ESPolicyEntity>> searchByTitle(@PathVariable("title") String title) {
-        return policyService.searchTitle(title);
+    public ResponseUtil<List<ESPolicyEntity>> searchByTitle(@PathVariable("title") String keyword) {
+        List<ESPolicyEntity> esPolicyEntityPage = policyService.searchTitle(keyword);
+        return ResponseUtil.success(esPolicyEntityPage);
     }
-    @GetMapping("/search/info/{id}")
-    public ResponseUtil<PolicyInfoView> searchByPolicyId(@PathVariable("id") String id) {
-        return policyService.searchByPolicyId(id);
+    @GetMapping("/search/id/{id}")
+    public ResponseUtil<ESPolicyEntity> searchByPolicyId(@PathVariable("id") String keyword) {
+        ESPolicyEntity esPolicy = policyService.searchByPolicyId(keyword);
+        return ResponseUtil.success(esPolicy);
     }
-    @GetMapping("/search/all")
-    public ResponseUtil<Page<ESPolicyEntity>> searchAll(Pageable pageable) {
-        return policyService.searchAll(pageable);
-    }
+    // 其不具有update功能, 本质是就是先删除后添加
+    // 只需要保证两个document的Id相同, 就能实现更新操作
     @PostMapping("/update/title/{id}")
     public ResponseUtil<String> updateTitle(@PathVariable("id") String id,
                                             @RequestBody String title){
-        return policyService.updateTitle(id, title);
+        try {
+            ESPolicyEntity updatePolicy = policyService.searchByPolicyId(id);
+            updatePolicy.setPolicyTitle(title);
+            PolicyEntity savePolicy = new PolicyEntity();
+            BeanUtils.copyProperties(updatePolicy, savePolicy);
+            policyService.addPolicy(savePolicy);
+        } catch (Exception e) {
+            log.error(String.format("ERROR: can not to update Policy %s",e.getMessage()));
+        }
+        return ResponseUtil.successMessage("update success");
     }
-    @GetMapping("/searchbytitlekeyword/{titlekeyword}")
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable,
-                                                                   @PathVariable("titlekeyword") String titleKeyword){
-        return policyService.searchByTitleKeyword(pageable, titleKeyword);
+
+    //TODO:查找不同政策占比
+    //TODO:热点推荐
+
+    @GetMapping("/new/{title}")
+    public ResponseUtil<List<ESPolicyEntity>> searchByGeo(@PathVariable("title") String keyword) {
+        List<ESPolicyEntity> esPolicy = policyService.find(keyword);
+        return ResponseUtil.success(esPolicy);
     }
-    // TODO: 2023/4/8 根据多条件查找
-    // TODO: 2023/4/8 查找不同政策占比
-//    @GetMapping("/search/typeproportion")
-//    public ResponseUtil<Map<String, Integer>> searchProportionByType(){
-//        return policyService.searchProportionByType();
-//    }
-    // TODO: 2023/4/8 热点推荐
 }
