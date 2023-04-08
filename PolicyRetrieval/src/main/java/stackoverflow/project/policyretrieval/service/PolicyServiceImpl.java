@@ -57,7 +57,7 @@ public class PolicyServiceImpl implements PolicyService{
         return esPolicyRepository.findByPolicyId(id);
     }
     @Override
-    public List<ESPolicyEntity> searchByTitle(String keyword){
-        return esPolicyRepository.searchByTitle(keyword);
+    public List<ESPolicyEntity> find(String keyword){
+        return esPolicyRepository.find(keyword);
     }
 }
