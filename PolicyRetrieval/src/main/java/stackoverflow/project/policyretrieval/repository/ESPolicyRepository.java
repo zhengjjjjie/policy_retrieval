@@ -45,6 +45,8 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
 //    @Highlight(fields = {
 //            @HighlightField(name = "POLICYTITLE")
 //    })
-    @Query("\"query\":{\"match\":{\"POLICYTITLE\":?0\" }}}")
+//    @Query("\"query\":{\"match\":{\"POLICYTITLE\":?0\" }}}")
+    @Query("{\"match\":{\"POLICYTITLE\":\"?0\"}}")
     List<ESPolicyEntity> find(String keyword);
+
 }
