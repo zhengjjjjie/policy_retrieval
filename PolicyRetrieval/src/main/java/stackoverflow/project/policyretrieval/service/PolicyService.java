@@ -11,4 +11,5 @@ public interface PolicyService {
     public ResponseUtil<String> addPolicy(PolicyEntity policy);
     public List<ESPolicyEntity> searchTitle(String keyword);
     public ESPolicyEntity searchByPolicyId(String id);
+    public List<ESPolicyEntity> searchByTitle(String keyword);
 }

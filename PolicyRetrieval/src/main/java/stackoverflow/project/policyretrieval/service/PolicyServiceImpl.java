@@ -2,6 +2,9 @@ package stackoverflow.project.policyretrieval.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -52,5 +55,9 @@ public class PolicyServiceImpl implements PolicyService{
     @Override
     public ESPolicyEntity searchByPolicyId(String id){
         return esPolicyRepository.findByPolicyId(id);
+    }
+    @Override
+    public List<ESPolicyEntity> searchByTitle(String keyword){
+        return esPolicyRepository.searchByTitle(keyword);
     }
 }
