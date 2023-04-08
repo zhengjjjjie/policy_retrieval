@@ -1,17 +1,15 @@
 package stackoverflow.project.policyretrieval.controller;
 
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import java.sql.ClientInfoStatus;
+
 import java.util.List;
 @Slf4j
 @RestController
@@ -54,5 +52,6 @@ public class PolicyController {
 
     //TODO:查找不同政策占比
     //TODO:热点推荐
+    //TODO：根据关键词（tag）搜索
 
 }

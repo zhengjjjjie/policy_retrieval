@@ -6,7 +6,7 @@ import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.LoginView;
+import stackoverflow.project.policyretrieval.view.EnquirerView;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class EnquirerController {
     @Autowired
     private EnquirerService enquirerService;
     @PostMapping("/login")
-    public ResponseUtil<String> login(@RequestBody LoginView loginView){
-        return enquirerService.login(loginView);
+    public ResponseUtil<String> login(@RequestBody EnquirerView enquirerView){
+        return enquirerService.login(enquirerView);
     }
     @PostMapping("/add")
     public ResponseUtil<String> addEnquirer(@RequestBody EnquirerEntity enquirerEntity){

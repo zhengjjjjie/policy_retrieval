@@ -6,9 +6,6 @@ import java.util.List;
 @Entity
 @Table(name = "enquirer")
 public class EnquirerEntity extends UserEntity{
-    @Basic
-    @Column(name = "nickname")
-    private int nickname;
 
     @Basic
     @Column(name = "gender")
@@ -20,8 +17,7 @@ public class EnquirerEntity extends UserEntity{
 
     @Basic
     @Column(name = "politics_status")
-    private int politicsStatus;
-
+    private String politicsStatus;
     @ManyToMany(targetEntity = PolicyEntity.class)
     @JoinTable(name = "collection",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -40,14 +36,6 @@ public class EnquirerEntity extends UserEntity{
             inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
     private List<PolicyEntity> tags;
 
-    public int getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(int nickname) {
-        this.nickname = nickname;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -64,11 +52,11 @@ public class EnquirerEntity extends UserEntity{
         this.age = age;
     }
 
-    public int getPoliticsStatus() {
+    public String getPoliticsStatus() {
         return politicsStatus;
     }
 
-    public void setPoliticsStatus(int politicsStatus) {
+    public void setPoliticsStatus(String politicsStatus) {
         this.politicsStatus = politicsStatus;
     }
 

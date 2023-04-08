@@ -19,6 +19,10 @@ public class UserEntity {
     private String password;
 
     @Basic
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Basic
     @Column(name = "identity")
     private Boolean identity;
 
@@ -48,6 +52,14 @@ public class UserEntity {
 
     public Boolean getIdentity() {
         return identity;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setIdentity(Boolean identity) {
