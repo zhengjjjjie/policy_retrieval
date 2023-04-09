@@ -1,7 +1,8 @@
 package stackoverflow.project.policyretrieval.entity;
 
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Data

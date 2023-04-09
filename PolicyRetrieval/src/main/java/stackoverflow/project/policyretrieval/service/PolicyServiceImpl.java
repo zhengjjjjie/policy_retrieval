@@ -2,6 +2,8 @@ package stackoverflow.project.policyretrieval.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -9,8 +11,12 @@ import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 
 import java.util.List;
+import java.util.Map;
+
+import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convertPage;
 
 @Slf4j
 @Service
@@ -46,11 +52,56 @@ public class PolicyServiceImpl implements PolicyService{
         return ResponseUtil.successMessage("添加成功！");
     }
     @Override
-    public List<ESPolicyEntity> searchTitle(String keyword){
-        return esPolicyRepository.findByPolicyTitle(keyword);
+    public ResponseUtil<List<ESPolicyEntity>>searchTitle(String keyword){
+        return ResponseUtil.success(esPolicyRepository.findByPolicyTitle(keyword));
     }
     @Override
-    public ESPolicyEntity searchByPolicyId(String id){
-        return esPolicyRepository.findByPolicyId(id);
+    public ResponseUtil<PolicyInfoView> searchByPolicyId(String id){
+        ESPolicyEntity esPolicyEntity = esPolicyRepository.findByPolicyId(id);
+        PolicyInfoView policyInfoView = new PolicyInfoView();
+        policyInfoView.setPolicyId(esPolicyEntity.getPolicyId());
+        policyInfoView.setPolicyTitle(esPolicyEntity.getPolicyTitle());
+        policyInfoView.setPolicyBody(esPolicyEntity.getPolicyBody());
+        policyInfoView.setPolicySource(esPolicyEntity.getPolicySource());
+        policyInfoView.setPolicyType(esPolicyEntity.getPolicyType());
+        policyInfoView.setCity(esPolicyEntity.getCity());
+        policyInfoView.setProvince(esPolicyEntity.getProvince());
+        policyInfoView.setPubTime(esPolicyEntity.getPubTime());
+        policyInfoView.setPubAgencyFullName(esPolicyEntity.getPubAgencyFullName());
+        return ResponseUtil.success(policyInfoView);
+    }
+
+    @Override
+    public ResponseUtil<String> updateTitle(String id, String title) {
+        // 其不具有update功能, 本质是就是先删除后添加
+        // 只需要保证两个document的Id相同, 就能实现更新操作
+        try {
+            ESPolicyEntity updatePolicy = esPolicyRepository.findByPolicyId(id);
+            updatePolicy.setPolicyTitle(title);
+            PolicyEntity savePolicy = new PolicyEntity();
+            BeanUtils.copyProperties(updatePolicy, savePolicy);
+            policyRepository.save(savePolicy);
+        } catch (Exception e) {
+            log.error(String.format("ERROR: can not to update Policy %s",e.getMessage()));
+        }
+        return ResponseUtil.successMessage("update success");
+    }
+
+    @Override
+    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable, String titleKeyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(titleKeyword, pageable);
+        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        return ResponseUtil.success(policyInfoViews);
+    }
+
+    @Override
+    public ResponseUtil<Page<ESPolicyEntity>> searchAll(Pageable pageable) {
+        return ResponseUtil.success(esPolicyRepository.findAll(pageable));
+    }
+
+    @Override
+    public ResponseUtil<Map<String, Integer>> searchProportionByType() {
+
+        return null;
     }
 }
