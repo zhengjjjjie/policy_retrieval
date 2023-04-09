@@ -2,6 +2,10 @@ package stackoverflow.project.policyretrieval.view;
 
 import lombok.Data;
 
+
+/*
+     description: 搜索简略结果
+ */
 @Data
 public class PolicyResultView{
      private String policyId;

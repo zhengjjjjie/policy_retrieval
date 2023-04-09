@@ -70,43 +70,6 @@ public class PolicyEntity {
     @Column(name = "UPDATEDATE",columnDefinition = "text")
     private String updateDate;
 
-//    @Basic
-//    @Column(name = "link")
-//    private String link;
-//
-//    @Basic
-//    @Column(name = "date")
-//    private Date date;
-//
-//    @ManyToMany(targetEntity = TagEntity.class)
-//    @JoinTable(name = "policy_tags",
-//            joinColumns = {@JoinColumn(name = "policy_id", referencedColumnName = "policy_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "tag_id")})
-//    private List<PolicyEntity> tags;
-
-//    public String getLink() {
-//        return link;
-//    }
-//
-//    public void setLink(String link) {
-//        this.link = link;
-//    }
-//
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
-//
-//    public List<PolicyEntity> getTags() {
-//        return tags;
-//    }
-//
-//    public void setTags(List<PolicyEntity> tags) {
-//        this.tags = tags;
-//    }
 
     public Integer getId() {
         return Id;
