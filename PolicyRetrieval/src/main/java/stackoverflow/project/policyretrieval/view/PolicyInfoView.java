@@ -1,5 +1,8 @@
 package stackoverflow.project.policyretrieval.view;
 
+/*
+    description: 详情页
+ */
 import lombok.Data;
 
 @Data

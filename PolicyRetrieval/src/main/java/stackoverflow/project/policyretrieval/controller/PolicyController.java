@@ -11,6 +11,7 @@ import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
+import stackoverflow.project.policyretrieval.view.Query;
 
 import java.util.List;
 
@@ -49,6 +50,19 @@ public class PolicyController {
         return policyService.searchByTitleKeyword(pageable, titleKeyword);
     }
     // TODO: 2023/4/8 根据多条件查找
+
+    /*
+    约定:
+    多条件查询需要传递比较多的参数, 并且包含 AND 和 NOT
+    所以我们需要类来实现这些参数的传输
+     */
+    @GetMapping("/complexsearch")
+    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(Pageable pageable,
+                                                            @RequestBody Query query){
+        return policyService.searchQuery(query, pageable);
+    }
+
+
     // TODO: 2023/4/8 查找不同政策占比
 //    @GetMapping("/search/typeproportion")
 //    public ResponseUtil<Map<String, Integer>> searchProportionByType(){
