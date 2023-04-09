@@ -53,7 +53,7 @@ public class EnquirerServiceImpl implements EnquirerService{
         enquirer.setCollection(enquirerEntity.getCollection());
         enquirer.setPoliticsStatus(enquirerEntity.getPoliticsStatus());
         enquirer.setTags(enquirerEntity.getTags());
-        enquirer.setHistory(enquirerEntity.getHistory());
+//        enquirer.setHistory(enquirerEntity.getHistory());
         enquirer.setPassword(enquirerEntity.getPassword());
         enquirerRepository.save(enquirer);
         return ResponseUtil.successMessage("更新成功!");
@@ -80,10 +80,10 @@ public class EnquirerServiceImpl implements EnquirerService{
     @Override
     public ResponseUtil<String> addHistory(int enquirerId, int policyId) {
         EnquirerEntity enquirer = enquirerRepository.getReferenceById(enquirerId);
-        List<PolicyEntity> history = enquirer.getHistory();
+//        List<PolicyEntity> history = enquirer.getHistory();
         PolicyEntity policy = policyRepository.getReferenceById(policyId);
-        history.add(policy);
-        enquirer.setHistory(history);
+//        history.add(policy);
+//        enquirer.setHistory(history);
         enquirerRepository.save(enquirer);
         return ResponseUtil.successMessage("添加成功!");
     }
@@ -94,7 +94,7 @@ public class EnquirerServiceImpl implements EnquirerService{
         List<PolicyEntity> collection = enquirer.getCollection();
         PolicyEntity policy = policyRepository.getReferenceById(policyId);
         collection.add(policy);
-        enquirer.setHistory(collection);
+//        enquirer.setHistory(collection);
         enquirerRepository.save(enquirer);
         return ResponseUtil.successMessage("添加成功!");
     }

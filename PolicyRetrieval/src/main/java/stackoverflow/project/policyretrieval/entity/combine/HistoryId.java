@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class HistoryId implements Serializable {
-    private String user_id;
+    private int user_id;
     private String policyid;
     private Timestamp click_time;
 }
