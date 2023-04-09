@@ -2,6 +2,7 @@ package stackoverflow.project.policyretrieval.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 
@@ -13,6 +14,9 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
 
     Page<ESPolicyEntity> findByPolicyTitleLike(String keyword, Pageable pageable);
     Page<ESPolicyEntity> findAll(Pageable pageable);
-
+    @Query(
+            
+    )
+    Page<ESPolicyEntity> searchByQuery(String titles, String grads, Pageable pageable);
 
 }
