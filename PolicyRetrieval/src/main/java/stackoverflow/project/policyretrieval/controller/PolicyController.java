@@ -4,6 +4,7 @@ package stackoverflow.project.policyretrieval.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -54,19 +55,20 @@ public class PolicyController {
 
     /*
     约定:
-    多条件查询需要传递比较多的参数, 并且包含 AND 和 NOT
+    多条件查询需要传递比较多的参数, 并且包含 AND 和 NOTs
     所以我们需要类来实现这些参数的传输
      */
-    @GetMapping("/complexsearch")
-    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(Pageable pageable,
+    @GetMapping("/complexsearch/{page}")
+    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody Query query){
-        return policyService.searchQuery(query, pageable);
+        Pageable page = PageRequest.of(pageNo,15);
+        return policyService.searchQuery(query, page);
     }
 
 
     // TODO: 2023/4/8 查找不同政策占比
 //    @GetMapping("/search/typeproportion")
-//    public ResponseUtil<Map<String, Integer>> searchProportionByType(){
+//    public ResponseUtil<Map<String, Integer>> searchProportionByType(){67
 //        return policyService.searchProportionByType();
 //    }
     // TODO: 2023/4/8 热点推荐
