@@ -1,13 +1,14 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.TagGroupEntity;
+import stackoverflow.project.policyretrieval.service.TagGroupService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
 @Service
-public class TagGroupServiceImpl implements TagGroupService{
+public class TagGroupServiceImpl implements TagGroupService {
 
     @Override
     public ResponseUtil<String> add(TagGroupEntity tagGroupEntity) {
