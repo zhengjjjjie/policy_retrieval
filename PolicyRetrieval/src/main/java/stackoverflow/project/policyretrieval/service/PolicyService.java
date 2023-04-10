@@ -24,5 +24,5 @@ public interface PolicyService {
 
     ResponseUtil<Map<String, Integer>> searchProportionByType();
 
-    ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable);
+    ResponseUtil<List<ESPolicyEntity>> searchQuery(Query query, Pageable pageable);
 }

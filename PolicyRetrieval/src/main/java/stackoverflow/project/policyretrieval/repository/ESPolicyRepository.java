@@ -13,10 +13,40 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
     ESPolicyEntity findByPolicyId(String id);
 
     Page<ESPolicyEntity> findByPolicyTitleLike(String keyword, Pageable pageable);
+
     Page<ESPolicyEntity> findAll(Pageable pageable);
-    @Query(
-            
+
+    //
+    @Query("{"+
+            "    \"bool\": {"+
+            "      \"should\": ["+
+            "        {"+
+            "          \"match\": {"+
+            "            \"POLICYTITLE\": \"?0\""+
+            "          }"+
+            "        },"+
+            "        {"+
+            "          \"match\": {"+
+            "            \"POLICYTYPE\": \"?2\""+
+            "          }"+
+            "        }"+
+            "      ],"+
+            "      \"must_not\": ["+
+            "        {"+
+            "          \"match\": {"+
+            "            \"POLICYTITLE\": \"?1\""+
+            "          }"+
+            "        },"+
+            "        {"+
+            "          \"match\": {"+
+            "            \"POLICYTYPE\": \"?3\""+
+            "          }"+
+            "        }"+
+            "      ]"+
+            "      "+
+            "    }"+
+            "  }"
     )
-    Page<ESPolicyEntity> searchByQuery(String titles, String grads, Pageable pageable);
+    List<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
 
 }

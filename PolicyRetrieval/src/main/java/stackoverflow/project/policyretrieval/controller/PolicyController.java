@@ -13,6 +13,7 @@ import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 import stackoverflow.project.policyretrieval.view.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class PolicyController {
     所以我们需要类来实现这些参数的传输
      */
     @GetMapping("/complexsearch")
-    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(Pageable pageable,
+    public ResponseUtil<List<ESPolicyEntity>> complexSearch(Pageable pageable,
                                                             @RequestBody Query query){
         return policyService.searchQuery(query, pageable);
     }
@@ -69,4 +70,22 @@ public class PolicyController {
 //        return policyService.searchProportionByType();
 //    }
     // TODO: 2023/4/8 热点推荐
+
+    @GetMapping("/test")
+    public Query test() {
+        Query query = new Query();
+        List<String> a = new ArrayList<>();
+        a.add("123");
+        List<String> b = new ArrayList<>();
+        b.add("234");
+        List<String> c = new ArrayList<>();
+        c.add("345");
+        List<String> d = new ArrayList<>();
+        d.add("456");
+        query.setTitles(a);
+        query.setPolicyType(b);
+        query.setNotPolicyType(c);
+        query.setNotTitles(d);
+        return query;
+    }
 }
