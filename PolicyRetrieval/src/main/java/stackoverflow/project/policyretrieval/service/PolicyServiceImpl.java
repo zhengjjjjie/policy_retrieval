@@ -107,7 +107,7 @@ public class PolicyServiceImpl implements PolicyService{
     }
 
     @Override
-    public ResponseUtil<List<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
+    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
         // 设计工具类 将List<String>转换为String
         String titles = query.getTitles_str();
         String notitles = query.getNoTitles_str();

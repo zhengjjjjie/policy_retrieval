@@ -47,6 +47,6 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
             "    }"+
             "  }"
     )
-    List<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
+    Page<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
 
 }
