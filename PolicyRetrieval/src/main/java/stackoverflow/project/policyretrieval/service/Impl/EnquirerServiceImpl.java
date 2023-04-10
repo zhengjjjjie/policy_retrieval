@@ -1,4 +1,4 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +8,7 @@ import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
+import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.EnquirerView;
 import stackoverflow.project.policyretrieval.view.LoginView;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class EnquirerServiceImpl implements EnquirerService{
+public class EnquirerServiceImpl implements EnquirerService {
     @Autowired
     private EnquirerRepository enquirerRepository;
     @Autowired

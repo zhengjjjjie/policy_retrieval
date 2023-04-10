@@ -1,15 +1,16 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.TagEntity;
 import stackoverflow.project.policyretrieval.repository.TagRepository;
+import stackoverflow.project.policyretrieval.service.TagService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 
 import java.util.List;
 
 @Service
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagRepository tagRepository;

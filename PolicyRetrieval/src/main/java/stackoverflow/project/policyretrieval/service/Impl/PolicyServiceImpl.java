@@ -1,4 +1,4 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +10,7 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
+import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 import stackoverflow.project.policyretrieval.view.Query;
@@ -21,7 +22,7 @@ import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convert
 
 @Slf4j
 @Service
-public class PolicyServiceImpl implements PolicyService{
+public class PolicyServiceImpl implements PolicyService {
     private final ESPolicyRepository esPolicyRepository;
     private final PolicyRepository policyRepository;
     private final TransactionTemplate transactionTemplate;
