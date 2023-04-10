@@ -15,4 +15,19 @@ public class Query {
     private List<String> NotTitles;
     private List<String> PolicyType;
     private List<String> NotPolicyType;
+
+    public String getTitles_str(){
+        return Titles.toString().replace("[", "").replace("]", "").replace(",","");
+    }
+    public String getNoTitles_str() {
+        return NotTitles.toString().replace("[", "").replace("]", "").replace(",","");
+    }
+    public String getPolicyType_str() {
+        return PolicyType.toString().replace("[", "").replace("]", "").replace(",","");
+    }
+    public String getNotePolicyType_str() {
+        return NotPolicyType.toString().replace("[", "").replace("]", "").replace(",","");
+    }
+
+    //通用匹配符
 }

@@ -1,12 +1,9 @@
 package stackoverflow.project.policyretrieval.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -110,10 +107,12 @@ public class PolicyServiceImpl implements PolicyService{
     }
 
     @Override
-    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
+    public ResponseUtil<List<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
         // 设计工具类 将List<String>转换为String
-        String titles = null;
-        String grads = null;
-        return ResponseUtil.success(esPolicyRepository.searchByQuery(titles, grads, pageable));
+        String titles = query.getTitles_str();
+        String notitles = query.getNoTitles_str();
+        String policyType = query.getPolicyType_str();
+        String notPolicyType = query.getNotePolicyType_str();
+        return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
     }
 }
