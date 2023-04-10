@@ -19,6 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/policy")
 public class PolicyController {
 
@@ -58,7 +59,7 @@ public class PolicyController {
     多条件查询需要传递比较多的参数, 并且包含 AND 和 NOTs
     所以我们需要类来实现这些参数的传输
      */
-    @GetMapping("/complexsearch/{page}")
+    @PostMapping("/complexsearch/{page}")
     public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody Query query){
         Pageable page = PageRequest.of(pageNo,15);
