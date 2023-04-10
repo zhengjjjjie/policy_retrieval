@@ -58,7 +58,7 @@ public class PolicyController {
     所以我们需要类来实现这些参数的传输
      */
     @GetMapping("/complexsearch")
-    public ResponseUtil<List<ESPolicyEntity>> complexSearch(Pageable pageable,
+    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(Pageable pageable,
                                                             @RequestBody Query query){
         return policyService.searchQuery(query, pageable);
     }
@@ -72,7 +72,7 @@ public class PolicyController {
     // TODO: 2023/4/8 热点推荐
 
     @GetMapping("/test")
-    public Query test() {
+    public ResponseUtil<Query> test() {
         Query query = new Query();
         List<String> a = new ArrayList<>();
         a.add("123");
@@ -86,6 +86,6 @@ public class PolicyController {
         query.setPolicyType(b);
         query.setNotPolicyType(c);
         query.setNotTitles(d);
-        return query;
+        return ResponseUtil.success(query);
     }
 }
