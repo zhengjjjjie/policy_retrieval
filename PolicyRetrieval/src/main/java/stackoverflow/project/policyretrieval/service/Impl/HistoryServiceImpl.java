@@ -1,4 +1,4 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.HistoryEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.HistoryRepository;
+import stackoverflow.project.policyretrieval.service.HistoryService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.HistoryView;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HistoryServiceImpl implements HistoryService{
+public class HistoryServiceImpl implements HistoryService {
 
     private final HistoryRepository historyRepository;
     private final ESPolicyRepository esPolicyRepository;

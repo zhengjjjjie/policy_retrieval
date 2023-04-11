@@ -12,7 +12,7 @@ import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-import stackoverflow.project.policyretrieval.view.Query;
+import stackoverflow.project.policyretrieval.view.QueryView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class PolicyController {
      */
     @PostMapping("/complexsearch/{page}")
     public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
-                                                            @RequestBody Query query){
+                                                            @RequestBody QueryView query){
         Pageable page = PageRequest.of(pageNo,15);
         return policyService.searchQuery(query, page);
     }
@@ -75,8 +75,8 @@ public class PolicyController {
     // TODO: 2023/4/8 热点推荐
 
     @GetMapping("/test")
-    public ResponseUtil<Query> test() {
-        Query query = new Query();
+    public ResponseUtil<QueryView> test() {
+        QueryView query = new QueryView();
         List<String> a = new ArrayList<>();
         a.add("123");
         List<String> b = new ArrayList<>();
