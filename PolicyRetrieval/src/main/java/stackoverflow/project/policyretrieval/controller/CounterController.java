@@ -10,6 +10,7 @@ import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -27,9 +28,14 @@ public class CounterController {
                                           @PathVariable("pid") String pid) {
         return counterService.addRecord(uid,pid);
     }
-    @GetMapping("/get/hotpolicy")
-    public ResponseUtil<Page<PolicyResultView>> getHotPolicies() {
-        return counterService.getHotPolicies();
+    @GetMapping("/get/hotpolicies/{size}")
+    public ResponseUtil<List<PolicyResultView>> getHotPolicies(@PathVariable("size") Integer Size) throws IOException {
+        // 最大查询条数限定
+        Integer Max_item = 10;
+        if (Size >= Max_item) {
+            Size = Max_item;
+        }
+        return counterService.getHotPolicies(Size);
 
     }
 

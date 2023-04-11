@@ -12,6 +12,7 @@ public class PolicyResultView{
      private String policyTitle;
      private String pubTime;
 
+     public PolicyResultView(){}
      public PolicyResultView(String policyId, String policyTitle, String pubTime) {
           this.policyTitle = policyTitle;
           this.policyId = policyId;

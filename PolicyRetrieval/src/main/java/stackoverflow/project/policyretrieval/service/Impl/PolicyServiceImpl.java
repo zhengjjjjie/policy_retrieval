@@ -13,7 +13,7 @@ import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-import stackoverflow.project.policyretrieval.view.Query;
+import stackoverflow.project.policyretrieval.view.QueryView;
 
 import java.util.List;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
+    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(QueryView query, Pageable pageable) {
         // 设计工具类 将List<String>转换为String
         String titles = query.getTitles_str();
         String notitles = query.getNoTitles_str();

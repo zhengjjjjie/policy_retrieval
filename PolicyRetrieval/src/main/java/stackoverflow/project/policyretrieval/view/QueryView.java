@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Query {
+public class QueryView {
     // 查询类, 可以设置需要包含的字段和不包含的关键词
     private List<String> Titles;
     private List<String> NotTitles;
