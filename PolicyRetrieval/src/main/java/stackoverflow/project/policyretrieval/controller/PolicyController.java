@@ -29,10 +29,8 @@ public class PolicyController {
     @Autowired
     private PolicyService policyService;
 
-    @PostMapping("/add")
-    public ResponseUtil<String> addPolicy(@RequestBody PolicyUploadView policy) {
     @PostMapping("/opr/add")
-    public ResponseUtil<String> addPolicy(@RequestBody PolicyEntity policy){
+    public ResponseUtil<String> addPolicy(@RequestBody PolicyUploadView policy){
         return policyService.addPolicy(policy);
     }
 

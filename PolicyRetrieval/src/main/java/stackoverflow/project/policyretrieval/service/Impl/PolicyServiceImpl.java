@@ -46,11 +46,11 @@ public class PolicyServiceImpl implements PolicyService {
     public ResponseUtil<String> addPolicy(PolicyUploadView policyUploadView) {
         // 规则性检查
         // PolicyId, policyTitle, pubTime不能为空
-        if (policy.getPolicyId().equals("") || policy.getPolicyTitle().equals("") || (policy.getPubTime() == null)) {
+        if (policyUploadView.getPolicyId().equals("") || policyUploadView.getPolicyTitle().equals("") || (policyUploadView.getPubTime() == null)) {
             return ResponseUtil.failMessage("PolicyId, policyTitle, pubTime不能为空");
         }
         //查询是否存在相同POLICYID
-        if (existsByPolicyId(policy.getPolicyId())) {
+        if (existsByPolicyId(policyUploadView.getPolicyId())) {
             return ResponseUtil.failMessage("已存在该政策");
         }
         PolicyEntity policy = new PolicyEntity();
@@ -157,9 +157,9 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public boolean existsByPolicyId(String policyId){
+    public boolean existsByPolicyId(String policyId) {
         return esPolicyRepository.existsByPolicyId(policyId);
-
+    }
     @Override
     public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword) {
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyBodyLike(keyword, page);
