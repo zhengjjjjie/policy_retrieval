@@ -49,4 +49,5 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
     )
     Page<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
 
+    Page<ESPolicyEntity> findByPolicyBodyLike(String keyword, Pageable page);
 }

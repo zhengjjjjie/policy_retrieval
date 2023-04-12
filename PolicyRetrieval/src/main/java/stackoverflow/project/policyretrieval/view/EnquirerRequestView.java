@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EnquirerView extends LoginView{
+public class EnquirerRequestView extends LoginRequestView {
     private String nickname;
     private int age;
     private String gender;

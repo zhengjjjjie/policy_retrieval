@@ -90,8 +90,8 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable, String titleKeyword) {
-        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(titleKeyword, pageable);
+    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable page, String keyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(keyword, page);
         Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
         return ResponseUtil.success(policyInfoViews);
     }
@@ -115,5 +115,12 @@ public class PolicyServiceImpl implements PolicyService {
         String policyType = query.getPolicyType_str();
         String notPolicyType = query.getNotePolicyType_str();
         return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
+    }
+
+    @Override
+    public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyBodyLike(keyword, page);
+        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        return ResponseUtil.success(policyInfoViews);
     }
 }
