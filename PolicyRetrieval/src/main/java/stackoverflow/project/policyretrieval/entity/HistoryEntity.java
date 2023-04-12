@@ -1,13 +1,13 @@
 package stackoverflow.project.policyretrieval.entity;
 
 
+import lombok.Data;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.springframework.data.annotation.CreatedDate;
 import stackoverflow.project.policyretrieval.entity.combine.HistoryId;
 
 import javax.persistence.*;
-import lombok.Data;
 import java.sql.Timestamp;
 
 @Entity

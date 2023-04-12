@@ -1,6 +1,7 @@
 package stackoverflow.project.policyretrieval.service.Impl;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.HistoryEntity;
@@ -9,12 +10,7 @@ import stackoverflow.project.policyretrieval.repository.HistoryRepository;
 import stackoverflow.project.policyretrieval.service.HistoryService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.HistoryView;
-import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

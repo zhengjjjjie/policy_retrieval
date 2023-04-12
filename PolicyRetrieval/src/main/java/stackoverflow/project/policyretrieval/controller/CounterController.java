@@ -3,11 +3,9 @@ package stackoverflow.project.policyretrieval.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.service.CounterService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
 import java.io.IOException;

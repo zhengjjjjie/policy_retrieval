@@ -3,7 +3,6 @@ package stackoverflow.project.policyretrieval.view;
 import lombok.Data;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 public class HistoryView {
