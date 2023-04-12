@@ -9,7 +9,7 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import java.util.List;
 
 public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEntity, String> {
-    List<ESPolicyEntity> findByPolicyTitle(String policy_title);
+    Page<ESPolicyEntity> findByPolicyTitle(Pageable pageable,String policy_title);
     ESPolicyEntity findByPolicyId(String id);
 
     Page<ESPolicyEntity> findByPolicyTitleLike(String keyword, Pageable pageable);
@@ -48,5 +48,5 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
             "  }"
     )
     Page<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
-
+    boolean existsByPolicyId(String id);
 }

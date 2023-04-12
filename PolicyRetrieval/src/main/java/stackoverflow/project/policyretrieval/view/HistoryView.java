@@ -1,6 +1,8 @@
 package stackoverflow.project.policyretrieval.view;
 
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -11,11 +13,13 @@ public class HistoryView {
     // add History time
     private String policyId;
     private String policyTitle;
-    private String pubTime;
+    @Field(name = "UPDATEDATE",type = FieldType.Date,format = {},
+            pattern = "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd'T'HH:mm:ss'+08:00' || strict_date_optional_time || epoch_millis")
+    private Date pubTime;
     private Timestamp historyTime;
 
     public HistoryView() {}
-    public HistoryView(String policyId, String policyTitle, String pubTime,Timestamp historyTime) {
+    public HistoryView(String policyId, String policyTitle, Date pubTime,Timestamp historyTime) {
         this.policyTitle = policyTitle;
         this.policyId = policyId;
         this.pubTime = pubTime;
@@ -38,11 +42,11 @@ public class HistoryView {
         this.policyTitle = policyTitle;
     }
 
-    public String getPubTime() {
+    public Date getPubTime() {
         return pubTime;
     }
 
-    public void setPubTime(String pubTime) {
+    public void setPubTime(Date pubTime) {
         this.pubTime = pubTime;
     }
 

@@ -3,14 +3,14 @@ package stackoverflow.project.policyretrieval.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "POLICY")
 public class PolicyEntity {
-
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer Id;
 
@@ -43,8 +43,8 @@ public class PolicyEntity {
     private String pubNumber;
 
     @Basic
-    @Column(name = "PUBTIME",columnDefinition = "text")
-    private String pubTime;
+    @Column(name = "PUBTIME",columnDefinition = "datetime")
+    private Date pubTime;
 
     @Basic
     @Column(name = "POLICYTYPE",columnDefinition = "text")
@@ -67,8 +67,8 @@ public class PolicyEntity {
     private String policySource;
 
     @Basic
-    @Column(name = "UPDATEDATE",columnDefinition = "text")
-    private String updateDate;
+    @Column(name = "UPDATEDATE",columnDefinition = "datetime")
+    private Date updateDate;
 
 
     public Integer getId() {
@@ -134,11 +134,11 @@ public class PolicyEntity {
         this.pubNumber = pubNumber;
     }
 
-    public String getPubTime() {
+    public Date getPubTime() {
         return pubTime;
     }
 
-    public void setPubTime(String pubTime) {
+    public void setPubTime(Date pubTime) {
         this.pubTime = pubTime;
     }
 
@@ -182,11 +182,11 @@ public class PolicyEntity {
         this.policySource = policySource;
     }
 
-    public String getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 }

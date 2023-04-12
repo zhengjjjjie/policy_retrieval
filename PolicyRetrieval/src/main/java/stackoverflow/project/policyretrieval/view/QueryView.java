@@ -20,6 +20,7 @@ public class QueryView {
         return Titles.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getNoTitles_str() {
+
         return NotTitles.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getPolicyType_str() {
