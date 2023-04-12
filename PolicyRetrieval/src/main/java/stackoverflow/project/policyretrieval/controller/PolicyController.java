@@ -9,9 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
+import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
+import stackoverflow.project.policyretrieval.view.PolicyResultView;
+import stackoverflow.project.policyretrieval.view.PolicyUploadView;
 import stackoverflow.project.policyretrieval.view.QueryView;
 
 import java.util.ArrayList;
@@ -26,14 +29,21 @@ public class PolicyController {
     @Autowired
     private PolicyService policyService;
 
+    @PostMapping("/add")
+    public ResponseUtil<String> addPolicy(@RequestBody PolicyUploadView policy) {
     @PostMapping("/opr/add")
     public ResponseUtil<String> addPolicy(@RequestBody PolicyEntity policy){
         return policyService.addPolicy(policy);
     }
-    @GetMapping("/search/{title}")
-    public ResponseUtil<List<ESPolicyEntity>> searchByTitle(@PathVariable("title") String title) {
-        return policyService.searchTitle(title);
+
+    @PostMapping("/search/title/{pagNo}")
+    public ResponseUtil<Page<PolicyResultView>> searchByTitle(@PathVariable("pagNo") Integer pageNo,
+                                                              @RequestBody List<String> Titles) {
+        //根据 标题查询, 返回简略页
+        Pageable page = PageRequest.of(pageNo, 15);
+        return policyService.searchTitle(page, Titles);
     }
+
     @GetMapping("/search/info/{id}")
     public ResponseUtil<PolicyInfoView> searchByPolicyId(@PathVariable("id") String id) {
         return policyService.searchByPolicyId(id);
@@ -45,9 +55,10 @@ public class PolicyController {
     }
     @PostMapping("/opr/update/title/{id}")
     public ResponseUtil<String> updateTitle(@PathVariable("id") String id,
-                                            @RequestBody String title){
+                                            @RequestBody String title) {
         return policyService.updateTitle(id, title);
     }
+
     @GetMapping("/search/title/{keyword}/{page}")
     public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
                                                                    @PathVariable("keyword") String keyword){
@@ -69,8 +80,8 @@ public class PolicyController {
      */
     @PostMapping("/search/complex/{page}")
     public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
-                                                            @RequestBody QueryView query){
-        Pageable page = PageRequest.of(pageNo,15);
+                                                            @RequestBody QueryView query) {
+        Pageable page = PageRequest.of(pageNo, 15);
         return policyService.searchQuery(query, page);
     }
 
@@ -98,5 +109,9 @@ public class PolicyController {
         query.setNotPolicyType(c);
         query.setNotTitles(d);
         return ResponseUtil.success(query);
+    }
+
+    public boolean existsByPolicyId(String id) {
+        return policyService.existsByPolicyId(id);
     }
 }

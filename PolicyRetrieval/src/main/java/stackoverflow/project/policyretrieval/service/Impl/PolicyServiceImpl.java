@@ -2,7 +2,9 @@ package stackoverflow.project.policyretrieval.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -13,8 +15,14 @@ import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
+import stackoverflow.project.policyretrieval.view.PolicyResultView;
+import stackoverflow.project.policyretrieval.view.PolicyUploadView;
 import stackoverflow.project.policyretrieval.view.QueryView;
 
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +43,34 @@ public class PolicyServiceImpl implements PolicyService {
         this.transactionTemplate = transactionTemplate;
     }
     @Override
-    public ResponseUtil<String> addPolicy(PolicyEntity policy) {
-
+    public ResponseUtil<String> addPolicy(PolicyUploadView policyUploadView) {
+        // 规则性检查
+        // PolicyId, policyTitle, pubTime不能为空
+        if (policy.getPolicyId().equals("") || policy.getPolicyTitle().equals("") || (policy.getPubTime() == null)) {
+            return ResponseUtil.failMessage("PolicyId, policyTitle, pubTime不能为空");
+        }
+        //查询是否存在相同POLICYID
+        if (existsByPolicyId(policy.getPolicyId())) {
+            return ResponseUtil.failMessage("已存在该政策");
+        }
+        PolicyEntity policy = new PolicyEntity();
+        policy.setPolicyId(policyUploadView.getPolicyId());
+        policy.setPolicyTitle(policyUploadView.getPolicyTitle());
+        policy.setPolicyGrade(policyUploadView.getPolicyGrade());
+        policy.setPubAgencyId(policyUploadView.getPubAgencyId());
+        policy.setPubAgency(policyUploadView.getPubAgency());
+        policy.setPubAgencyFullName(policyUploadView.getPubAgencyFullName());
+        policy.setPubNumber(policyUploadView.getPubNumber());
+        policy.setPubTime(policyUploadView.getPubTime());
+        policy.setPolicyType(policyUploadView.getPolicyType());
+        policy.setPolicyBody(policyUploadView.getPolicyBody());
+        policy.setProvince(policyUploadView.getProvince());
+        policy.setCity(policyUploadView.getCity());
+        policy.setPolicySource(policyUploadView.getPolicySource());
+        Date date = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+        policy.setUpdateDate(date);
+        BeanUtils.copyProperties(policy,policyUploadView);
         // 实现事物控制, 无状态且线性安全
         final PolicyEntity savePolicy = transactionTemplate.execute(status ->
                 policyRepository.save(policy)
@@ -45,6 +79,8 @@ public class PolicyServiceImpl implements PolicyService {
         assert savePolicy != null;
         BeanUtils.copyProperties(savePolicy,esPolicy);
         esPolicy.setId(savePolicy.getId());
+        System.out.println(esPolicy.getPolicyId());
+        System.out.println(esPolicy.getPolicyTitle());
         // try to save in es
         try {
             esPolicyRepository.save(esPolicy);
@@ -54,8 +90,11 @@ public class PolicyServiceImpl implements PolicyService {
         return ResponseUtil.successMessage("添加成功！");
     }
     @Override
-    public ResponseUtil<List<ESPolicyEntity>>searchTitle(String keyword){
-        return ResponseUtil.success(esPolicyRepository.findByPolicyTitle(keyword));
+    public ResponseUtil<Page<PolicyResultView>>searchTitle(Pageable pageable, List<String> titles){
+        String keywords = titles.toString().toString().replace("[", "").replace("]", "").replace(",","");
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitle(pageable,keywords);
+        Page<PolicyResultView> resultViews = convertPage(esPolicyEntities,PolicyResultView.class);
+        return ResponseUtil.success(resultViews);
     }
     @Override
     public ResponseUtil<PolicyInfoView> searchByPolicyId(String id){
@@ -116,6 +155,10 @@ public class PolicyServiceImpl implements PolicyService {
         String notPolicyType = query.getNotePolicyType_str();
         return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
     }
+
+    @Override
+    public boolean existsByPolicyId(String policyId){
+        return esPolicyRepository.existsByPolicyId(policyId);
 
     @Override
     public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword) {
