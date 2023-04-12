@@ -7,7 +7,8 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-import stackoverflow.project.policyretrieval.view.Query;
+import stackoverflow.project.policyretrieval.view.QueryView;
+
 
 import java.util.List;
 import java.util.Map;
@@ -24,5 +25,5 @@ public interface PolicyService {
 
     ResponseUtil<Map<String, Integer>> searchProportionByType();
 
-    ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable);
+    ResponseUtil<Page<ESPolicyEntity>> searchQuery(QueryView query, Pageable pageable);
 }

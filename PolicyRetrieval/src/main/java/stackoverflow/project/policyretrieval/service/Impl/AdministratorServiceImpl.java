@@ -1,9 +1,10 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.AdministratorEntity;
 import stackoverflow.project.policyretrieval.repository.AdministratorRepository;
+import stackoverflow.project.policyretrieval.service.AdministratorService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.LoginView;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class AdministratorServiceImpl implements AdministratorService{
+public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     private AdministratorRepository administratorRepository;
     @Override

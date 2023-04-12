@@ -1,21 +1,19 @@
-package stackoverflow.project.policyretrieval.service;
+package stackoverflow.project.policyretrieval.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
+import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
-import stackoverflow.project.policyretrieval.view.Query;
+import stackoverflow.project.policyretrieval.view.QueryView;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,7 @@ import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convert
 
 @Slf4j
 @Service
-public class PolicyServiceImpl implements PolicyService{
+public class PolicyServiceImpl implements PolicyService {
     private final ESPolicyRepository esPolicyRepository;
     private final PolicyRepository policyRepository;
     private final TransactionTemplate transactionTemplate;
@@ -110,10 +108,12 @@ public class PolicyServiceImpl implements PolicyService{
     }
 
     @Override
-    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(Query query, Pageable pageable) {
+    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(QueryView query, Pageable pageable) {
         // 设计工具类 将List<String>转换为String
-        String titles = null;
-        String grads = null;
-        return ResponseUtil.success(esPolicyRepository.searchByQuery(titles, grads, pageable));
+        String titles = query.getTitles_str();
+        String notitles = query.getNoTitles_str();
+        String policyType = query.getPolicyType_str();
+        String notPolicyType = query.getNotePolicyType_str();
+        return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
     }
 }
