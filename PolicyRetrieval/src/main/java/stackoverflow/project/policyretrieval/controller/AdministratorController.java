@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.AdministratorEntity;
 import stackoverflow.project.policyretrieval.service.AdministratorService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.LoginView;
+import stackoverflow.project.policyretrieval.view.LoginRequestView;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class AdministratorController {
     private AdministratorService administratorService;
 
     @PostMapping("/login")
-    public ResponseUtil<String> login(@RequestBody LoginView loginView){
-        return administratorService.login(loginView);
+    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
+        return administratorService.login(loginRequestView);
     }
 
     @PostMapping("/add")

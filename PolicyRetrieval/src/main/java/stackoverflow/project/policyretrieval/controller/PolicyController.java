@@ -31,15 +31,8 @@ public class PolicyController {
 
     @PostMapping("/add")
     public ResponseUtil<String> addPolicy(@RequestBody PolicyUploadView policy) {
-        // 规则性检查
-        // PolicyId, policyTitle, pubTime不能为空
-        if (policy.getPolicyId().equals("") || policy.getPolicyTitle().equals("") || (policy.getPubTime() == null)) {
-            return ResponseUtil.failMessage("PolicyId, policyTitle, pubTime不能为空");
-        }
-        //查询是否存在相同POLICYID
-        if (existsByPolicyId(policy.getPolicyId())) {
-            return ResponseUtil.failMessage("已存在该政策");
-        }
+    @PostMapping("/opr/add")
+    public ResponseUtil<String> addPolicy(@RequestBody PolicyEntity policy){
         return policyService.addPolicy(policy);
     }
 
@@ -55,22 +48,28 @@ public class PolicyController {
     public ResponseUtil<PolicyInfoView> searchByPolicyId(@PathVariable("id") String id) {
         return policyService.searchByPolicyId(id);
     }
-
-    @GetMapping("/search/all")
-    public ResponseUtil<Page<ESPolicyEntity>> searchAll(Pageable pageable) {
+    @GetMapping("/search/all/{page}")
+    public ResponseUtil<Page<ESPolicyEntity>> searchAll(@PathVariable("page") int page) {
+        Pageable pageable = PageRequest.of(page,15);
         return policyService.searchAll(pageable);
     }
-
-    @PostMapping("/update/title/{id}")
+    @PostMapping("/opr/update/title/{id}")
     public ResponseUtil<String> updateTitle(@PathVariable("id") String id,
                                             @RequestBody String title) {
         return policyService.updateTitle(id, title);
     }
 
-    @GetMapping("/searchbytitlekeyword/{titlekeyword}")
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable,
-                                                                   @PathVariable("titlekeyword") String titleKeyword) {
-        return policyService.searchByTitleKeyword(pageable, titleKeyword);
+    @GetMapping("/search/title/{keyword}/{page}")
+    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
+                                                                   @PathVariable("keyword") String keyword){
+        Pageable page = PageRequest.of(pageNo,15);
+        return policyService.searchByTitleKeyword(page, keyword);
+    }
+    @GetMapping("/search/body/{keyword}/{page}")
+    public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(@PathVariable("page") Integer pageNo,
+                                                                   @PathVariable("keyword") String keyword){
+        Pageable page = PageRequest.of(pageNo,15);
+        return policyService.searchByBodyKeyword(page, keyword);
     }
     // TODO: 2023/4/8 根据多条件查找
 
@@ -79,7 +78,7 @@ public class PolicyController {
     多条件查询需要传递比较多的参数, 并且包含 AND 和 NOTs
     所以我们需要类来实现这些参数的传输
      */
-    @PostMapping("/mul-queries/{page}")
+    @PostMapping("/search/complex/{page}")
     public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody QueryView query) {
         Pageable page = PageRequest.of(pageNo, 15);

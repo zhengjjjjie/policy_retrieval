@@ -44,6 +44,15 @@ public class PolicyServiceImpl implements PolicyService {
     }
     @Override
     public ResponseUtil<String> addPolicy(PolicyUploadView policyUploadView) {
+        // 规则性检查
+        // PolicyId, policyTitle, pubTime不能为空
+        if (policy.getPolicyId().equals("") || policy.getPolicyTitle().equals("") || (policy.getPubTime() == null)) {
+            return ResponseUtil.failMessage("PolicyId, policyTitle, pubTime不能为空");
+        }
+        //查询是否存在相同POLICYID
+        if (existsByPolicyId(policy.getPolicyId())) {
+            return ResponseUtil.failMessage("已存在该政策");
+        }
         PolicyEntity policy = new PolicyEntity();
         policy.setPolicyId(policyUploadView.getPolicyId());
         policy.setPolicyTitle(policyUploadView.getPolicyTitle());
@@ -120,8 +129,8 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable pageable, String titleKeyword) {
-        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(titleKeyword, pageable);
+    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable page, String keyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(keyword, page);
         Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
         return ResponseUtil.success(policyInfoViews);
     }
@@ -146,8 +155,15 @@ public class PolicyServiceImpl implements PolicyService {
         String notPolicyType = query.getNotePolicyType_str();
         return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
     }
+
     @Override
     public boolean existsByPolicyId(String policyId){
         return esPolicyRepository.existsByPolicyId(policyId);
+
+    @Override
+    public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword) {
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyBodyLike(keyword, page);
+        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        return ResponseUtil.success(policyInfoViews);
     }
 }

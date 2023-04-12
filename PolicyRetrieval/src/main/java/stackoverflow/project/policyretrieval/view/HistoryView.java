@@ -5,7 +5,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 public class HistoryView {

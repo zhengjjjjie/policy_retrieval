@@ -9,9 +9,10 @@ package stackoverflow.project.policyretrieval.entity.combine;
  */
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
-import lombok.Data;
 
 @Data
 @AllArgsConstructor
