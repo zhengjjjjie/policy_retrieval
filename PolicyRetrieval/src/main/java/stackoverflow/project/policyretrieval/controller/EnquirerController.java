@@ -19,10 +19,10 @@ import java.util.List;
 public class EnquirerController {
     @Autowired
     private EnquirerService enquirerService;
-    @PostMapping("/login")
-    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
-        return enquirerService.login(loginRequestView);
-    }
+//    @PostMapping("/login")
+//    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
+//        return enquirerService.login(loginRequestView);
+//    }
     @GetMapping("/get/info/{username}")
     public ResponseUtil<?> getInfo(@PathVariable String username){
         return enquirerService.getInfo(username);
