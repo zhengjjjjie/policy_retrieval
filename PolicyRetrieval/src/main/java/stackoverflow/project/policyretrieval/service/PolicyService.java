@@ -31,6 +31,8 @@ public interface PolicyService {
 
     ResponseUtil<Page<PolicyResultView>> searchQuery(QueryView query,String address, Pageable pageable);
 
+    ResponseUtil<Page<PolicyResultView>> smartQuery(QueryView query,String address, String uid, Pageable pageable);
+
     boolean existsByPolicyId(String policyId);
     
     ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(Pageable page, String keyword);

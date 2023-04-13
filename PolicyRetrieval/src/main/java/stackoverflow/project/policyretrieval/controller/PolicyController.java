@@ -93,31 +93,25 @@ public class PolicyController {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        // 个性化推荐, 根据用户所在地区搜索.
+        //推荐, 根据用户所在地区搜索
         return policyService.searchQuery(query, address,page);
     }
-
-    // TODO: 2023/4/8 热点推荐
-
-    @GetMapping("/test")
-    public ResponseUtil<QueryView> test() {
-        QueryView query = new QueryView();
-        List<String> a = new ArrayList<>();
-        a.add("123");
-        List<String> b = new ArrayList<>();
-        b.add("234");
-        List<String> c = new ArrayList<>();
-        c.add("345");
-        List<String> d = new ArrayList<>();
-        d.add("456");
-        query.setTitles(a);
-        query.setPolicyType(b);
-        query.setNotPolicyType(c);
-        query.setNotTitles(d);
-        return ResponseUtil.success(query);
-    }
-
-    public boolean existsByPolicyId(String id) {
-        return policyService.existsByPolicyId(id);
+    @PostMapping("/smartsearch/{uid}/{page}")
+    public ResponseUtil<Page<PolicyResultView>> smartSearch(@PathVariable("page") Integer pageNo,
+                                                            @PathVariable("uid") String uid,
+                                                            @RequestBody QueryView query) {
+        Pageable page = PageRequest.of(pageNo, 15);
+        //当用户访问详情页的时候, 记录其信息
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = sra.getRequest();
+        String ip = request.getRemoteAddr();
+        String address = null;
+        try {
+            address = new AmapService().getAddressByIp(ip);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        //个性化推荐
+        return policyService.smartQuery(query, address,uid, page);
     }
 }

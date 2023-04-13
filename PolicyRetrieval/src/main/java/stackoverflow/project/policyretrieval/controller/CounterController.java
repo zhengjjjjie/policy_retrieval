@@ -53,6 +53,11 @@ public class CounterController {
         return counterService.getHotPolicies(Size);
 
     }
+    // 更新用户偏好数据
+    @GetMapping("/resetprefer")
+    public ResponseUtil<String> resetPrefer() {
+        return counterService.resetPrefer();
+    }
 
     //以下接口弃用! 请使用api/user/history/search/{pageNo}
     @GetMapping("/get/history/{uid}/{pageNo}")
@@ -60,12 +65,6 @@ public class CounterController {
                                                            @PathVariable("pageNo") int pageNo) {
         Pageable page = PageRequest.of(pageNo, SizeOfPage);
         return counterService.getHistory(uid, page);
-    }
-    @GetMapping("/resetprefer")
-    public ResponseUtil<String> resetPrefer() {
-        System.out.println("######执行######");
-
-        return counterService.resetPrefer();
     }
 
 }

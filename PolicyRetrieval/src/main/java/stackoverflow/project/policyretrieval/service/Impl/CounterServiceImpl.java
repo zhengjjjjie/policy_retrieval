@@ -136,6 +136,8 @@ public class CounterServiceImpl implements CounterService {
 
     @Override
     public ResponseUtil<String> resetPrefer() {
+
+        // 这里有笨蛋, 写得好烂
         // 根据用户的行为习惯, 重建搜索优化查询表
         //首先得到所有用户的uid
         List<String> users = historyRepository.searchAllUser();
@@ -204,9 +206,23 @@ public class CounterServiceImpl implements CounterService {
             }
             PreferenceEntity preferenceEntity = new PreferenceEntity();
             preferenceEntity.setUsername(s);
-            preferenceEntity.setProvince(maxPro);
-            preferenceEntity.setType(maxType);
-            preferenceEntity.setSource(maxSorc);
+
+            if (maxPro != null) {
+                preferenceEntity.setProvince(maxPro);
+                preferenceEntity.setProvinceWeight(Double.valueOf(provinces.get(maxPro)) / ((double) i_p));
+            }
+            if (maxType != null) {
+                preferenceEntity.setType(maxType);
+                preferenceEntity.setTypeWeight(Double.valueOf(types.get(maxType)) / ((double) i_t));
+            }
+            if (maxSorc != null) {
+                preferenceEntity.setSource(maxSorc);
+                preferenceEntity.setSourceWeight(Double.valueOf(sources.get(maxSorc)) / ((double) i_s));
+            }
+            if (preferRepository.existsByUsername(s)) {
+                //如果已经存在, 那么更新覆盖
+                preferenceEntity.setId(preferRepository.findByUsername(s).getId());
+            }
             // to save user
             preferRepository.save(preferenceEntity);
         }//end of user loop
