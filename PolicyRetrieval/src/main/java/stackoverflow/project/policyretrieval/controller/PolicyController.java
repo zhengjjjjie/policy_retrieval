@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
-import stackoverflow.project.policyretrieval.entity.PolicyEntity;
-import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.AmapService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;

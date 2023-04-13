@@ -2,13 +2,9 @@ package stackoverflow.project.policyretrieval.entity;
 
 
 import lombok.Data;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.springframework.data.annotation.CreatedDate;
 import stackoverflow.project.policyretrieval.entity.combine.HistoryId;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Data
@@ -43,10 +39,8 @@ public class HistoryEntity {
 //    @ManyToOne(targetEntity = PolicyEntity.class,fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private String policyId;
     @Id
-    @CreatedDate
-    @Column(name = "click_time",updatable = false,nullable = false)
-    @Generated(GenerationTime.INSERT)
-    private Timestamp clickTime;
+    @Column(name = "click_time",nullable = false)
+    private Date clickTime;
 
 }
 

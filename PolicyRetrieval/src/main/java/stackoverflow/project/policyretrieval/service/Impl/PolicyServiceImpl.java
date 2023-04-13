@@ -109,6 +109,11 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
+    public ESPolicyEntity getByPolicyId(String id) {
+        return esPolicyRepository.findByPolicyId(id);
+    }
+
+    @Override
     public ResponseUtil<String> updateTitle(String id, String title) {
         // 其不具有update功能, 本质是就是先删除后添加
         // 只需要保证两个document的Id相同, 就能实现更新操作
