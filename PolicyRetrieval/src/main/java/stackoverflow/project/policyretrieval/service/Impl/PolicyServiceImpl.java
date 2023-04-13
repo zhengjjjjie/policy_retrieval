@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
+import stackoverflow.project.policyretrieval.entity.PreferenceEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
+import stackoverflow.project.policyretrieval.repository.PreferRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
@@ -29,14 +31,18 @@ import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convert
 public class PolicyServiceImpl implements PolicyService {
     private final ESPolicyRepository esPolicyRepository;
     private final PolicyRepository policyRepository;
+    private final PreferRepository preferRepository;
     private final TransactionTemplate transactionTemplate;
+
 
     public PolicyServiceImpl(PolicyRepository policyRepository,
                              ESPolicyRepository esPolicyRepository,
-                             TransactionTemplate transactionTemplate) {
+                             PreferRepository preferRepository, TransactionTemplate transactionTemplate) {
         this.policyRepository = policyRepository;
         this.esPolicyRepository = esPolicyRepository;
+        this.preferRepository = preferRepository;
         this.transactionTemplate = transactionTemplate;
+
     }
     @Override
     public ResponseUtil<String> addPolicy(PolicyUploadView policyUploadView) {
@@ -165,6 +171,30 @@ public class PolicyServiceImpl implements PolicyService {
                 policyType, notPolicyType,
                 bodies,notePolicyBodies,
                 address,weight,
+                pageable);
+        Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
+        return ResponseUtil.success(policyInfoViews);
+    }
+    public ResponseUtil<Page<PolicyResultView>> smartQuery(QueryView query,String address,String uid, Pageable pageable) {
+        //将List<String>转换为String进行查询
+        String titles = query.getTitles_str();
+        String notitles = query.getNoTitles_str();
+        String policyType = query.getPolicyType_str();
+        String notPolicyType = query.getNotPolicyType_str();
+        String bodies = query.getPolicyBodies_str();
+        String notePolicyBodies = query.getNotPolicyBodies_str();
+        double weight = (float) 0.5 / (query.getTitles().size() );
+        if (weight <= 0.0001) {
+            weight = 0.0001;
+        }
+        // 获取用户画像
+        PreferenceEntity pe = preferRepository.findByUsername(uid);
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.smartsearchByQuery(titles,notitles,
+                policyType, notPolicyType,
+                bodies,notePolicyBodies,
+                address,weight,
+                pe.getProvince(), pe.getProvinceWeight(),
+                pe.getType(),pe.getTypeWeight(),
                 pageable);
         Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
         return ResponseUtil.success(policyInfoViews);
