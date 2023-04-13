@@ -21,5 +21,5 @@ public class PolicyInfoView {
     private String policyBody;
     private String province;
     private String city;
-    public String policySource;
+    private String policySource;
 }
