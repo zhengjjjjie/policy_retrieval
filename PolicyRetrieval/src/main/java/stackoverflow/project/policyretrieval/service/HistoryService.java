@@ -7,11 +7,9 @@ package stackoverflow.project.policyretrieval.service;
     查询
  */
 
-import stackoverflow.project.policyretrieval.entity.HistoryEntity;
+import org.springframework.data.domain.Pageable;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.HistoryView;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

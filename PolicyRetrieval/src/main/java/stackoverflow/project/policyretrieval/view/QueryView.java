@@ -15,19 +15,28 @@ public class QueryView {
     private List<String> NotTitles;
     private List<String> PolicyType;
     private List<String> NotPolicyType;
+    private List<String> Bodies;
+    private List<String> NotBodies;
 
     public String getTitles_str(){
         return Titles.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getNoTitles_str() {
+
         return NotTitles.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getPolicyType_str() {
         return PolicyType.toString().replace("[", "").replace("]", "").replace(",","");
     }
-    public String getNotePolicyType_str() {
+    public String getNotPolicyType_str() {
         return NotPolicyType.toString().replace("[", "").replace("]", "").replace(",","");
     }
 
+    public String getPolicyBodies_str() {
+        return Bodies.toString().replace("[", "").replace("]", "").replace(",","");
+    }
+    public String getNotPolicyBodies_str() {
+        return NotBodies.toString().replace("[", "").replace("]", "").replace(",","");
+    }
     //通用匹配符
 }

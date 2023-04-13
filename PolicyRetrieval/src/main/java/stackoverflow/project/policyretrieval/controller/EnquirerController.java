@@ -2,14 +2,15 @@ package stackoverflow.project.policyretrieval.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
-import stackoverflow.project.policyretrieval.view.LoginView;
+import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
+import stackoverflow.project.policyretrieval.view.LoginRequestView;
 
 import java.util.List;
 
@@ -18,16 +19,20 @@ import java.util.List;
 public class EnquirerController {
     @Autowired
     private EnquirerService enquirerService;
-    @PostMapping("/login")
-    public ResponseUtil<String> login(@RequestBody LoginView loginView){
-        return enquirerService.login(loginView);
+//    @PostMapping("/login")
+//    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
+//        return enquirerService.login(loginRequestView);
+//    }
+    @GetMapping("/get/info/{username}")
+    public ResponseUtil<?> getInfo(@PathVariable String username){
+        return enquirerService.getInfo(username);
     }
-    @PostMapping("/add")
+    @PostMapping("/opr/add")
     public ResponseUtil<String> addEnquirer(@RequestBody EnquirerEntity enquirerEntity){
         return enquirerService.add(enquirerEntity);
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/opr/delete/{id}")
     public ResponseUtil<String> deleteEnquirer(@PathVariable int id){
         return enquirerService.delete(id);
     }
@@ -37,13 +42,14 @@ public class EnquirerController {
         return enquirerService.update(enquirerEntity);
     }
 
-    @GetMapping("/getall")
-    public ResponseUtil<Page<EnquirerEntity>> getAllEnquirers(Pageable pageable){
+    @GetMapping("/opr/all/{page}")
+    public ResponseUtil<Page<EnquirerEntity>> getAllEnquirers(@PathVariable("page") int page) {
+        Pageable pageable = PageRequest.of(page,15);
         return enquirerService.getAll(pageable);
     }
 
-    @GetMapping("/getbyusername/{username}")
-    public ResponseUtil<EnquirerView> getEnquirerByUsername(@PathVariable String username){
+    @GetMapping("/opr/get/username/{username}")
+    public ResponseUtil<EnquirerRequestView> getEnquirerByUsername(@PathVariable String username){
         return enquirerService.getByUsername(username);
     }
     @PostMapping("/addhistory/{enquirer_id}/{policy_id}")

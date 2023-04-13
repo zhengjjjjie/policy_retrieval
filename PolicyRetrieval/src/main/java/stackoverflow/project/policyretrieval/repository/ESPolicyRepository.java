@@ -9,7 +9,7 @@ import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import java.util.List;
 
 public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEntity, String> {
-    List<ESPolicyEntity> findByPolicyTitle(String policy_title);
+    Page<ESPolicyEntity> findByPolicyTitle(Pageable pageable,String policy_title);
     ESPolicyEntity findByPolicyId(String id);
 
     Page<ESPolicyEntity> findByPolicyTitleLike(String keyword, Pageable pageable);
@@ -17,36 +17,61 @@ public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEnti
     Page<ESPolicyEntity> findAll(Pageable pageable);
 
     //
-    @Query("{"+
+    @Query(
+            "{"+
             "    \"bool\": {"+
             "      \"should\": ["+
-            "        {"+
-            "          \"match\": {"+
+            "        {\"match\":"+
+            "          {"+
             "            \"POLICYTITLE\": \"?0\""+
             "          }"+
             "        },"+
-            "        {"+
-            "          \"match\": {"+
+            "        {\"match\":"+
+            "          {"+
             "            \"POLICYTYPE\": \"?2\""+
+            "          }"+
+            "        },"+
+            "        {\"match\":"+
+            "          {"+
+            "          \"POLICYBODY\": \"?4\""+
+            "          }"+
+            "        },"+
+            "        {\"match\":"+
+            "          {"+
+            "          \"POLICYTITLE\": {"+
+            "            \"query\": \"?6\","+
+            "            \"boost\": ?7"+
+            "            }"+
             "          }"+
             "        }"+
             "      ],"+
             "      \"must_not\": ["+
-            "        {"+
-            "          \"match\": {"+
+            "        {\"match\":"+
+            "          {"+
             "            \"POLICYTITLE\": \"?1\""+
             "          }"+
             "        },"+
-            "        {"+
-            "          \"match\": {"+
+            "        { \"match\":"+
+            "          {"+
             "            \"POLICYTYPE\": \"?3\""+
+            "          }"+
+            "        },"+
+            "        { \"match\":"+
+            "          {"+
+            "          \"POLICYBODY\": \"?5\""+
             "          }"+
             "        }"+
             "      ]"+
-            "      "+
             "    }"+
             "  }"
     )
-    Page<ESPolicyEntity> searchByQuery(String titles, String notTitles, String policy_type,String notpolicy_type, Pageable pageable);
+    Page<ESPolicyEntity> searchByQuery(String titles, String notTitles,
+                                       String policy_type,String noTpolicy_type,
+                                       String bodies, String notBodies,
+                                       String address,double boost,
+                                       Pageable pageable);
+    
+    boolean existsByPolicyId(String id);
 
+    Page<ESPolicyEntity> findByPolicyBodyLike(String keyword, Pageable page);
 }

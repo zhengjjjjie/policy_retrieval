@@ -5,13 +5,13 @@ import org.springframework.data.domain.Pageable;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
-import stackoverflow.project.policyretrieval.view.LoginView;
+import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
+import stackoverflow.project.policyretrieval.view.LoginRequestView;
 
 import java.util.List;
 
 public interface EnquirerService {
-    ResponseUtil<String> login(LoginView loginView);
+    ResponseUtil<String> login(LoginRequestView loginRequestView);
     ResponseUtil<String> add(EnquirerEntity enquirerEntity);
 
     ResponseUtil<String> delete(int id);
@@ -20,7 +20,7 @@ public interface EnquirerService {
 
     ResponseUtil<Page<EnquirerEntity>> getAll(Pageable pageable);
 
-    ResponseUtil<EnquirerView> getByUsername(String username);
+    ResponseUtil<EnquirerRequestView> getByUsername(String username);
 
     ResponseUtil<String> addHistory(int enquirerId, int recordId);
 
@@ -29,4 +29,7 @@ public interface EnquirerService {
     ResponseUtil<List<PolicyEntity>> getHistory(String username);
 
     ResponseUtil<List<PolicyEntity>> getCollection(String username);
+
+    ResponseUtil<?> getInfo(String username);
+
 }

@@ -1,11 +1,15 @@
 package stackoverflow.project.policyretrieval.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
+import java.util.Date;
 
 
 @Data
@@ -29,8 +33,9 @@ public class ESPolicyEntity {
     private String pubAgencyFullName;
     @Field(name = "PUBNUMBER", analyzer = "ik_max_word")
     private String pubNumber;
-    @Field(name = "PUBTIME")
-    private String pubTime;
+    @Field(name = "PUBTIME",type = FieldType.Date,format = {},
+            pattern = "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd'T'HH:mm:ss'+08:00' || strict_date_optional_time || epoch_millis")
+    private Date pubTime;
     @Field(name = "POLICYTYPE", analyzer = "ik_max_word")
     private String policyType;
     @Field(name = "POLICYBODY",analyzer = "ik_max_word")
@@ -41,7 +46,8 @@ public class ESPolicyEntity {
     private String city;
     @Field(name = "POLICYSOURCE", analyzer = "ik_max_word")
     private String policySource;
-    @Field(name = "UPDATEDATE")
-    private String updateDate;
+    @Field(name = "UPDATEDATE",type = FieldType.Date,format = {},
+            pattern = "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd'T'HH:mm:ss'+08:00' || strict_date_optional_time || epoch_millis")
+    private Date updateDate;
 
 }
