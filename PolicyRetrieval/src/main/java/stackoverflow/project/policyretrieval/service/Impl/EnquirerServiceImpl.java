@@ -10,8 +10,8 @@ import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
-import stackoverflow.project.policyretrieval.view.EnquirerView;
-import stackoverflow.project.policyretrieval.view.LoginView;
+import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
+import stackoverflow.project.policyretrieval.view.LoginRequestView;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +23,9 @@ public class EnquirerServiceImpl implements EnquirerService {
     @Autowired
     private PolicyRepository policyRepository;
     @Override
-    public ResponseUtil<String> login(LoginView loginView) {
-        EnquirerEntity enquirer = enquirerRepository.findEnquirerEntityByUsername(loginView.getUsername());
-        if (!Objects.equals(enquirer.getPassword(), loginView.getPassword())) {
+    public ResponseUtil<String> login(LoginRequestView loginRequestView) {
+        EnquirerEntity enquirer = enquirerRepository.findEnquirerEntityByUsername(loginRequestView.getUsername());
+        if (!Objects.equals(enquirer.getPassword(), loginRequestView.getPassword())) {
             return ResponseUtil.failMessage("登录失败！");
         }
         return ResponseUtil.successMessage("登录成功！");
@@ -50,7 +50,7 @@ public class EnquirerServiceImpl implements EnquirerService {
         enquirer.setGender(enquirerEntity.getGender());
         enquirer.setUsername(enquirerEntity.getUsername());
         enquirer.setNickname(enquirerEntity.getNickname());
-        enquirer.setIdentity(enquirerEntity.getIdentity());
+        enquirer.setRole(enquirerEntity.getRole());
         enquirer.setCollection(enquirerEntity.getCollection());
         enquirer.setPoliticsStatus(enquirerEntity.getPoliticsStatus());
         enquirer.setTags(enquirerEntity.getTags());
@@ -66,9 +66,9 @@ public class EnquirerServiceImpl implements EnquirerService {
     }
 
     @Override
-    public ResponseUtil<EnquirerView> getByUsername(String username) {
+    public ResponseUtil<EnquirerRequestView> getByUsername(String username) {
         EnquirerEntity enquirerEntity = enquirerRepository.findEnquirerEntityByUsername(username);
-        EnquirerView enquirerView = new EnquirerView();
+        EnquirerRequestView enquirerView = new EnquirerRequestView();
         enquirerView.setUsername(enquirerEntity.getUsername());
         enquirerView.setPassword(enquirerEntity.getPassword());
         enquirerView.setNickname(enquirerEntity.getPassword());
@@ -108,5 +108,20 @@ public class EnquirerServiceImpl implements EnquirerService {
     @Override
     public ResponseUtil<List<PolicyEntity>> getCollection(String username) {
         return ResponseUtil.success(enquirerRepository.findCollectionByUsername(username));
+    }
+
+    @Override
+    public ResponseUtil<?> getInfo(String username) {
+        if(enquirerRepository.findEnquirerEntityByUsername(username) == null){
+            return ResponseUtil.failMessage("不存在该用户！");
+        }
+        EnquirerEntity enquirerEntity = enquirerRepository.findEnquirerEntityByUsername(username);
+        EnquirerRequestView enquirerRequestView = new EnquirerRequestView();
+        enquirerRequestView.setNickname(enquirerEntity.getNickname());
+        enquirerRequestView.setUsername(enquirerEntity.getUsername());
+        enquirerRequestView.setAge(enquirerEntity.getAge());
+        enquirerRequestView.setGender(enquirerEntity.getGender());
+        enquirerRequestView.setPoliticsStatus(enquirerEntity.getPoliticsStatus());
+        return ResponseUtil.success(enquirerRequestView);
     }
 }
