@@ -2,9 +2,7 @@ package stackoverflow.project.policyretrieval.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -19,9 +17,7 @@ import stackoverflow.project.policyretrieval.view.PolicyResultView;
 import stackoverflow.project.policyretrieval.view.PolicyUploadView;
 import stackoverflow.project.policyretrieval.view.QueryView;
 
-import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -129,9 +125,9 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable page, String keyword) {
+    public ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(Pageable page, String keyword) {
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyTitleLike(keyword, page);
-        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
         return ResponseUtil.success(policyInfoViews);
     }
 
@@ -147,13 +143,26 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseUtil<Page<ESPolicyEntity>> searchQuery(QueryView query, Pageable pageable) {
-        // 设计工具类 将List<String>转换为String
+    public ResponseUtil<Page<PolicyResultView>> searchQuery(QueryView query,String address, Pageable pageable) {
+        //将List<String>转换为String进行查询
         String titles = query.getTitles_str();
         String notitles = query.getNoTitles_str();
         String policyType = query.getPolicyType_str();
-        String notPolicyType = query.getNotePolicyType_str();
-        return ResponseUtil.success(esPolicyRepository.searchByQuery(titles,notitles, policyType, notPolicyType, pageable));
+        String notPolicyType = query.getNotPolicyType_str();
+        String bodies = query.getPolicyBodies_str();
+        String notePolicyBodies = query.getNotPolicyBodies_str();
+        double weight = (float) 0.5 / (query.getTitles().size() );
+        if (weight <= 0.0001) {
+            weight = 0.0001;
+        }
+        String boost = String.format("%.2f",weight);
+        Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.searchByQuery(titles,notitles,
+                policyType, notPolicyType,
+                bodies,notePolicyBodies,
+                address,weight,
+                pageable);
+        Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
+        return ResponseUtil.success(policyInfoViews);
     }
 
     @Override
@@ -161,9 +170,9 @@ public class PolicyServiceImpl implements PolicyService {
         return esPolicyRepository.existsByPolicyId(policyId);
     }
     @Override
-    public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword) {
+    public ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(Pageable page, String keyword) {
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyBodyLike(keyword, page);
-        Page<PolicyInfoView> policyInfoViews = convertPage(esPolicyEntities, PolicyInfoView.class);
+        Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
         return ResponseUtil.success(policyInfoViews);
     }
 }

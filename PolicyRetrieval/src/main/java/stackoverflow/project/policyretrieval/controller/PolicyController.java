@@ -3,20 +3,25 @@ package stackoverflow.project.policyretrieval.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.service.PolicyService;
+import stackoverflow.project.policyretrieval.util.AmapService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.PolicyInfoView;
 import stackoverflow.project.policyretrieval.view.PolicyResultView;
 import stackoverflow.project.policyretrieval.view.PolicyUploadView;
 import stackoverflow.project.policyretrieval.view.QueryView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +63,13 @@ public class PolicyController {
     }
 
     @GetMapping("/search/title/{keyword}/{page}")
-    public ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
+    public ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
                                                                    @PathVariable("keyword") String keyword){
         Pageable page = PageRequest.of(pageNo,15);
         return policyService.searchByTitleKeyword(page, keyword);
     }
     @GetMapping("/search/body/{keyword}/{page}")
-    public ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(@PathVariable("page") Integer pageNo,
+    public ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(@PathVariable("page") Integer pageNo,
                                                                    @PathVariable("keyword") String keyword){
         Pageable page = PageRequest.of(pageNo,15);
         return policyService.searchByBodyKeyword(page, keyword);
@@ -77,18 +82,23 @@ public class PolicyController {
     所以我们需要类来实现这些参数的传输
      */
     @PostMapping("/search/complex/{page}")
-    public ResponseUtil<Page<ESPolicyEntity>> complexSearch(@PathVariable("page") Integer pageNo,
+    public ResponseUtil<Page<PolicyResultView>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody QueryView query) {
         Pageable page = PageRequest.of(pageNo, 15);
-        return policyService.searchQuery(query, page);
+        //当用户访问详情页的时候, 记录其信息
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = sra.getRequest();
+        String ip = request.getRemoteAddr();
+        String address = null;
+        try {
+            address = new AmapService().getAddressByIp(ip);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        // 个性化推荐, 根据用户所在地区搜索.
+        return policyService.searchQuery(query, address,page);
     }
 
-
-    // TODO: 2023/4/8 查找不同政策占比
-//    @GetMapping("/search/typeproportion")
-//    public ResponseUtil<Map<String, Integer>> searchProportionByType(){67
-//        return policyService.searchProportionByType();
-//    }
     // TODO: 2023/4/8 热点推荐
 
     @GetMapping("/test")

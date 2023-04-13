@@ -20,16 +20,16 @@ public interface PolicyService {
     public ResponseUtil<PolicyInfoView> searchByPolicyId(String id);
     public ResponseUtil<String> updateTitle(String id, String title);
 
-    ResponseUtil<Page<PolicyInfoView>> searchByTitleKeyword(Pageable page, String keyword);
+    ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(Pageable page, String keyword);
 
     ResponseUtil<Page<ESPolicyEntity>> searchAll(Pageable pageable);
 
     ResponseUtil<Map<String, Integer>> searchProportionByType();
 
-    ResponseUtil<Page<ESPolicyEntity>> searchQuery(QueryView query, Pageable pageable);
+    ResponseUtil<Page<PolicyResultView>> searchQuery(QueryView query,String address, Pageable pageable);
 
     boolean existsByPolicyId(String policyId);
     
-    ResponseUtil<Page<PolicyInfoView>> searchByBodyKeyword(Pageable page, String keyword);
+    ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(Pageable page, String keyword);
 
 }

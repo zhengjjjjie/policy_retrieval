@@ -21,7 +21,7 @@ public class CounterController {
     private CounterService counterService;
 
 
-    //测试添加记录
+    //添加记录
     @PostMapping("/add/{uid}/{pid}")
     public ResponseUtil<String> addRecord(@PathVariable("uid") String uid,
                                           @PathVariable("pid") String pid) {
