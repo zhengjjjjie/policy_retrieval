@@ -35,8 +35,7 @@ public class AuthController {
         return ResponseUtil.success();
     }
     @PostMapping("/register")
-    public ResponseUtil<?> register(@RequestParam String username,
-                                    @RequestParam String password) {
-        return userService.register(username, password);
+    public ResponseUtil<?> register(@RequestBody LoginRequestView loginRequestView) {
+        return userService.register(loginRequestView.getUsername(), loginRequestView.getPassword());
     }
 }
