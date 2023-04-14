@@ -58,7 +58,7 @@ public class CounterServiceImpl implements CounterService {
         historyEntity.setUserName(counterEntity.getUserId());
         historyEntity.setPolicyId(counterEntity.getPolicyId());
         // 获取当前时间
-        Date date = new Date();
+        Date date = new Date(new Date().getTime() + 28800000);
         counterEntity.setClickTime(date);
         historyEntity.setClickTime(date);
 

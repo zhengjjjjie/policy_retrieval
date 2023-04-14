@@ -69,6 +69,7 @@ public class PolicyServiceImpl implements PolicyService {
         policy.setProvince(policyUploadView.getProvince());
         policy.setCity(policyUploadView.getCity());
         policy.setPolicySource(policyUploadView.getPolicySource());
+//        Date date = new Date(new Date().getTime() + 28800000);
         Date date = new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         policy.setUpdateDate(date);

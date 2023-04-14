@@ -18,7 +18,7 @@ public class WebMvcConfigurer extends WebMvcConfigurationSupport {
                 .excludePathPatterns(
                         "/api/policy/search**",
                         "/api/auth/**",
-                        "/api/counter/get/**",
+                        "/api/counter/**",
                         "/js/**",
                         "/css/**",
                         "/images/**");
