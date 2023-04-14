@@ -1,6 +1,7 @@
 package stackoverflow.project.policyretrieval.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 

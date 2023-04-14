@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*", maxAge = 7200)
+//@CrossOrigin(origins = "*", maxAge = 7200)
 @RequestMapping("/api/counter")
 public class CounterController {
 

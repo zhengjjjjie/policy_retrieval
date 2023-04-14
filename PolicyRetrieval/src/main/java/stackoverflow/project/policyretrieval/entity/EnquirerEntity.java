@@ -2,12 +2,14 @@ package stackoverflow.project.policyretrieval.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@Proxy(lazy = false)
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "enquirer")
 public class EnquirerEntity extends UserEntity{
