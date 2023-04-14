@@ -24,6 +24,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         String contextPath = request.getContextPath();
         String url = requestUri.substring(contextPath.length());
 
+        if (url.equals("/error")){
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"msg\":\"/error\"}");
+            return false;
+        }
         // 不需要登录的url放行
         if (!needAuth(url)) {
             return true;
