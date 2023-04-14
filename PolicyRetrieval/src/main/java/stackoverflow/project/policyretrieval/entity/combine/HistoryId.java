@@ -13,13 +13,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 public class HistoryId implements Serializable {
     private String userName;
     private String policyId;
-    private Timestamp clickTime;
+    private Date clickTime;
     public HistoryId() {
     }
     public void setUserName(String userName) {
@@ -30,7 +31,7 @@ public class HistoryId implements Serializable {
         this.policyId = policyId;
     }
 
-    public void setClickTime(Timestamp clickTime) {
+    public void setClickTime(Date clickTime) {
         this.clickTime = clickTime;
     }
 

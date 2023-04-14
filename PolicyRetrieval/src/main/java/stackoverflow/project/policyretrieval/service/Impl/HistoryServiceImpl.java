@@ -46,8 +46,12 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public ResponseUtil<String> createHistory(String uid, String policy_id) {
-
-        return null;
+    public List<HistoryEntity> searchHistoryByUid(String username) {
+        return historyRepository.findByUserName(username);
     }
+    @Override
+    public List<String> getAllUserName() {
+        return historyRepository.searchAllUser();
+    }
+
 }

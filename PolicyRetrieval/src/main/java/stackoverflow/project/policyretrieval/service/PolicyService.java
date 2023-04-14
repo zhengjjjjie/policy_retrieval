@@ -18,6 +18,9 @@ public interface PolicyService {
     public ResponseUtil<String> addPolicy(PolicyUploadView policy);
     public ResponseUtil<Page<PolicyResultView>> searchTitle(Pageable pageable, List<String> keyword);
     public ResponseUtil<PolicyInfoView> searchByPolicyId(String id);
+
+    //共内部使用, 直接返回实体类
+    public ESPolicyEntity getByPolicyId(String id);
     public ResponseUtil<String> updateTitle(String id, String title);
 
     ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(Pageable page, String keyword);
@@ -27,6 +30,8 @@ public interface PolicyService {
     ResponseUtil<Map<String, Integer>> searchProportionByType();
 
     ResponseUtil<Page<PolicyResultView>> searchQuery(QueryView query,String address, Pageable pageable);
+
+    ResponseUtil<Page<PolicyResultView>> smartQuery(QueryView query,String address, String uid, Pageable pageable);
 
     boolean existsByPolicyId(String policyId);
     

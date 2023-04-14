@@ -8,6 +8,7 @@ package stackoverflow.project.policyretrieval.service;
  */
 
 import org.springframework.data.domain.Pageable;
+import stackoverflow.project.policyretrieval.entity.HistoryEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.HistoryView;
 
@@ -17,8 +18,8 @@ public interface HistoryService {
     // 返回视图参考HistoryView
     // 排列方式以时间排序
     public ResponseUtil<List<HistoryView>> searchHistoryByUid(String username, Pageable pageable);
+    //根据用户返回历史记录(无分页)
+    public List<HistoryEntity> searchHistoryByUid(String username);
+    public List<String> getAllUserName();
 
-    //当前端用户点击详情页时, 可以使用该接口生成一条历史记录
-    //
-    public ResponseUtil<String> createHistory(String uid, String policy_id);
 }
