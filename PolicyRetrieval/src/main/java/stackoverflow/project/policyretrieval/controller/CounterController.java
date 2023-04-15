@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.HistoryEntity;
@@ -50,7 +52,6 @@ public class CounterController {
             Size = Max_item;
         }
         return counterService.getHotPolicies(Size);
-
     }
     // 更新用户偏好数据
     @GetMapping("/resetprefer")
