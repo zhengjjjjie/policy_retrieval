@@ -3,14 +3,17 @@ package stackoverflow.project.policyretrieval.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@Proxy(lazy = false)
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "enquirer")
 public class EnquirerEntity extends UserEntity{
