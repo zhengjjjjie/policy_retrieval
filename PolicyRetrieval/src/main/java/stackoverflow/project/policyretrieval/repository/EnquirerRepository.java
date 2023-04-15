@@ -11,9 +11,7 @@ import java.util.List;
 
 public interface EnquirerRepository extends JpaRepository<EnquirerEntity, Integer> {
     EnquirerEntity findEnquirerEntityByUsername(String username);
-    @Query()
-    List<PolicyEntity> findHistoryByUsername(String username);
-    @Query()
-    List<PolicyEntity> findCollectionByUsername(String username);
+//    Page<PolicyEntity> findHistoryByUsername(String username,  Pageable page);
     Page<EnquirerEntity> findAll(Pageable pageable);
+    boolean existsByUsername(String username);
 }

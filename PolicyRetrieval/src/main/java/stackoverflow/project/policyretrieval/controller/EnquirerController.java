@@ -6,11 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
-import stackoverflow.project.policyretrieval.entity.PolicyEntity;
+import stackoverflow.project.policyretrieval.service.CollectionService;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
+import stackoverflow.project.policyretrieval.service.HistoryService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.CollectionView;
 import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
-import stackoverflow.project.policyretrieval.view.LoginRequestView;
+import stackoverflow.project.policyretrieval.view.HistoryView;
 
 import java.util.List;
 
@@ -19,6 +21,12 @@ import java.util.List;
 public class EnquirerController {
     @Autowired
     private EnquirerService enquirerService;
+    @Autowired
+    private HistoryService historyService;
+    @Autowired
+    private CollectionService collectionService;
+
+    private final int SizeOfPage = 15;
 //    @PostMapping("/login")
 //    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
 //        return enquirerService.login(loginRequestView);
@@ -52,25 +60,28 @@ public class EnquirerController {
     public ResponseUtil<EnquirerRequestView> getEnquirerByUsername(@PathVariable String username){
         return enquirerService.getByUsername(username);
     }
-    @PostMapping("/addhistory/{enquirer_id}/{policy_id}")
-    public ResponseUtil<String> addHistory(@PathVariable("enquirer_id") int enquirerId,
-                                          @PathVariable("policy_id") int policyId){
-        return enquirerService.addHistory(enquirerId, policyId);
+    @GetMapping ("/get/history/{uid}/{pageNo}")
+    public ResponseUtil<List<HistoryView>> getHistoryByUsername(Pageable pageable,
+                                                                @PathVariable("pageNo") Integer pageNo,
+                                                                @PathVariable("uid") String username) {
+        //每页返回30条记录
+        Pageable page = PageRequest.of(pageNo, 30);
+        return historyService.searchHistoryByUid(username, page);
     }
-    @GetMapping("/gethistory/{username}")
-    public ResponseUtil<List<PolicyEntity>> getHistory(@PathVariable("username") String username){
-        return enquirerService.getHistory(username);
-    }
-    @PostMapping("/addcollection/{enquirer_id}/{policy_id}")
-    public ResponseUtil<String> addCollection(@PathVariable("enquirer_id") int enquirerId,
-                                           @PathVariable("policy_id") int policyId){
-        return enquirerService.addCollection(enquirerId, policyId);
-    }
-    @GetMapping("/getcollection/{username}")
-    public ResponseUtil<List<PolicyEntity>> getCollection(@PathVariable("username") String username){
-        return enquirerService.getCollection(username);
+    @GetMapping("/get/collection/{uid}/{pageNo}")
+    public ResponseUtil<Page<CollectionView>> getCollectionByUsername(Pageable pageable,
+                                                                      @PathVariable("pageNo") Integer pageNo,
+                                                                      @PathVariable("uid") String username) {
+        //每页返回30条记录
+        Pageable page = PageRequest.of(pageNo, 30);
+        return collectionService.searchCollectionByUsername(username, page);
     }
 
-    //TODO:阅读记录各类占比
-    //TODO:收藏量排行
+    @PostMapping("/add/collection/{uid}/{policyid}")
+    public ResponseUtil<?> addCollectionByUsername(
+            @PathVariable("policyid") String policyId,
+            @PathVariable("uid") String username) {
+        return collectionService.addCollection(username,policyId);
+    }
+
 }

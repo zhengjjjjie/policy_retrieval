@@ -72,13 +72,6 @@ public class PolicyController {
         Pageable page = PageRequest.of(pageNo,pageMax);
         return policyService.searchByBodyKeyword(page, keyword);
     }
-    // TODO: 2023/4/8 根据多条件查找
-
-    /*
-    约定:
-    多条件查询需要传递比较多的参数, 并且包含 AND 和 NOTs
-    所以我们需要类来实现这些参数的传输
-     */
     @PostMapping("/search/complex/{page}")
     public ResponseUtil<Page<PolicyResultView>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody QueryView query) {

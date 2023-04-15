@@ -22,12 +22,5 @@ public class UserController {
     private HistoryService historyService;
 
     //根据用户返回历史记录
-    @GetMapping ("/history/search/{pageNo}")
-    public ResponseUtil<List<HistoryView>> loadSearch(Pageable pageable,
-                                                      @PathVariable("pageNo") Integer pageNo,
-                                                      @RequestBody String username) {
-        //每页返回30条记录
-        Pageable page = PageRequest.of(pageNo, 30);
-        return historyService.searchHistoryByUid(username, page);
-    }
+
 }

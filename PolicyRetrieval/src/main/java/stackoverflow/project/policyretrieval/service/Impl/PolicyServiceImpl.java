@@ -69,7 +69,6 @@ public class PolicyServiceImpl implements PolicyService {
         policy.setProvince(policyUploadView.getProvince());
         policy.setCity(policyUploadView.getCity());
         policy.setPolicySource(policyUploadView.getPolicySource());
-//        Date date = new Date(new Date().getTime() + 28800000);
         Date date = new Date();
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         policy.setUpdateDate(date);
@@ -168,6 +167,9 @@ public class PolicyServiceImpl implements PolicyService {
             weight = 0.0001;
         }
         String boost = String.format("%.2f",weight);
+        if (boost.equals("Infinity")) {
+            boost = "1";
+        }
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.searchByQuery(titles,notitles,
                 policyType, notPolicyType,
                 bodies,notePolicyBodies,

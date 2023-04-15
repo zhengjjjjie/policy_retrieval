@@ -6,8 +6,6 @@ import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 
-import java.util.List;
-
 public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEntity, String> {
     Page<ESPolicyEntity> findByPolicyTitle(Pageable pageable,String policy_title);
     ESPolicyEntity findByPolicyId(String id);

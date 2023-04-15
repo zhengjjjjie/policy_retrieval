@@ -13,6 +13,8 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.CounterEntity;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -30,6 +32,7 @@ import java.util.*;
 import org.springframework.data.domain.Pageable;
 
 @Service
+@EnableScheduling
 public class CounterServiceImpl implements CounterService {
 
     private final ESCounterRepository esCounterRepository;
@@ -125,18 +128,9 @@ public class CounterServiceImpl implements CounterService {
         return null;
     }
 
-    @Override
-    public ResponseUtil<Page<PolicyResultView>> getHistory(String uid, Pageable page) {
-        // 根据用户id查询历史记录
-        List<HistoryView> historyViews = new ArrayList<>();
-
-
-        return null;
-    }
 
     @Override
     public ResponseUtil<String> resetPrefer() {
-
         // 这里有笨蛋, 写得好烂
         // 根据用户的行为习惯, 重建搜索优化查询表
         //首先得到所有用户的uid
@@ -227,5 +221,98 @@ public class CounterServiceImpl implements CounterService {
             preferRepository.save(preferenceEntity);
         }//end of user loop
         return ResponseUtil.successMessage("执行完毕");
+    }
+
+    @Scheduled(cron = "0 0 0/1 * * ?")
+    public void task() {
+        System.out.println("执行定时任务: 构建用户画像");
+        // 这里有笨蛋, 写得好烂
+        // 根据用户的行为习惯, 重建搜索优化查询表
+        //首先得到所有用户的uid
+        List<String> users = historyRepository.searchAllUser();
+        // 遍历所有用户, 构建用户画像
+        for( String s : users) {
+            Map<String, Integer> provinces = new HashMap<>();
+            int i_p = 0;
+            Map<String, Integer> types = new HashMap<>();
+            int i_t = 0;
+            Map<String, Integer> sources = new HashMap<>();
+            int i_s = 0;
+
+            //得到所有政策的条目
+            List<HistoryEntity> polies = historyRepository.findByUserName(s);
+            for (HistoryEntity e : polies) {
+                ESPolicyEntity policy = esPolicyRepository.findByPolicyId(e.getPolicyId());
+                String province = policy.getProvince();
+                String type = policy.getPolicyType();
+                String source = policy.getPolicySource();
+                if (!province.equals("")) {
+                    i_p++;
+                    if (provinces.containsKey(province)) {
+                        provinces.put(province, provinces.get(province)+1);
+                    }
+                    else {
+                        provinces.put(province,1);
+                    }
+                }
+                if (!type.equals("")) {
+                    i_t++;
+                    if (types.containsKey(type)) {
+                        types.put(type, types.get(type)+1);
+                    }
+                    else {
+                        types.put(type,1);
+                    }
+                }
+                if (!source.equals("")) {
+                    i_s++;
+                    if (sources.containsKey(source)) {
+                        sources.put(province, sources.get(province)+1);
+                    }
+                    else {
+                        sources.put(province,1);
+                    }
+                }
+            }
+            String maxPro = null;
+            String maxType = null;
+            String maxSorc = null;
+            for (String key : provinces.keySet()) {
+                if (maxPro == null || provinces.get(key) > provinces.get(maxPro)) {
+                    maxPro = key;
+                }
+            }
+            for (String key : types.keySet()) {
+                if (maxType == null || types.get(key) > types.get(maxType)) {
+                    maxType = key;
+                }
+            }
+            for (String key : sources.keySet()) {
+                if (maxSorc == null || sources.get(key) > sources.get(maxSorc)) {
+                    maxSorc = key;
+                }
+            }
+            PreferenceEntity preferenceEntity = new PreferenceEntity();
+            preferenceEntity.setUsername(s);
+
+            if (maxPro != null) {
+                preferenceEntity.setProvince(maxPro);
+                preferenceEntity.setProvinceWeight(Double.valueOf(provinces.get(maxPro)) / ((double) i_p));
+            }
+            if (maxType != null) {
+                preferenceEntity.setType(maxType);
+                preferenceEntity.setTypeWeight(Double.valueOf(types.get(maxType)) / ((double) i_t));
+            }
+            if (maxSorc != null) {
+                preferenceEntity.setSource(maxSorc);
+                preferenceEntity.setSourceWeight(Double.valueOf(sources.get(maxSorc)) / ((double) i_s));
+            }
+            if (preferRepository.existsByUsername(s)) {
+                //如果已经存在, 那么更新覆盖
+                preferenceEntity.setId(preferRepository.findByUsername(s).getId());
+            }
+            // to save user
+            preferRepository.save(preferenceEntity);
+        }//end of user loop
     }
 }
