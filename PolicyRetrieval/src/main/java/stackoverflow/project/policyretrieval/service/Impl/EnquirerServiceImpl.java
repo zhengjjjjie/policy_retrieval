@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
+import stackoverflow.project.policyretrieval.entity.HistoryEntity;
 import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.repository.PolicyRepository;
@@ -12,10 +13,13 @@ import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
 import stackoverflow.project.policyretrieval.view.LoginRequestView;
+import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convertPage;
 @Service
 public class EnquirerServiceImpl implements EnquirerService {
     @Autowired
@@ -51,9 +55,9 @@ public class EnquirerServiceImpl implements EnquirerService {
         enquirer.setUsername(enquirerEntity.getUsername());
         enquirer.setNickname(enquirerEntity.getNickname());
         enquirer.setRole(enquirerEntity.getRole());
-        enquirer.setCollection(enquirerEntity.getCollection());
+//        enquirer.setCollection(enquirerEntity.getCollection());
         enquirer.setPoliticsStatus(enquirerEntity.getPoliticsStatus());
-        enquirer.setTags(enquirerEntity.getTags());
+//        enquirer.setTags(enquirerEntity.getTags());
 //        enquirer.setHistory(enquirerEntity.getHistory());
         enquirer.setPassword(enquirerEntity.getPassword());
         enquirerRepository.save(enquirer);
@@ -89,26 +93,40 @@ public class EnquirerServiceImpl implements EnquirerService {
         return ResponseUtil.successMessage("添加成功!");
     }
 
-    @Override
-    public ResponseUtil<String> addCollection(int enquirerId, int policyId) {
-        EnquirerEntity enquirer = enquirerRepository.getReferenceById(enquirerId);
-        List<PolicyEntity> collection = enquirer.getCollection();
-        PolicyEntity policy = policyRepository.getReferenceById(policyId);
-        collection.add(policy);
-//        enquirer.setHistory(collection);
-        enquirerRepository.save(enquirer);
-        return ResponseUtil.successMessage("添加成功!");
-    }
+//    @Override
+//    public ResponseUtil<String> addCollection(int enquirerId, int policyId) {
+//        EnquirerEntity enquirer = enquirerRepository.getReferenceById(enquirerId);
+////        List<PolicyEntity> collection = enquirer.getCollection();
+//        PolicyEntity policy = policyRepository.getReferenceById(policyId);
+//        collection.add(policy);
+////        enquirer.setHistory(collection);
+//        enquirerRepository.save(enquirer);
+//        return ResponseUtil.successMessage("添加成功!");
+//    }
 
-    @Override
-    public ResponseUtil<List<PolicyEntity>> getHistory(String username) {
-        return ResponseUtil.success(enquirerRepository.findHistoryByUsername(username));
-    }
-
-    @Override
-    public ResponseUtil<List<PolicyEntity>> getCollection(String username) {
-        return ResponseUtil.success(enquirerRepository.findCollectionByUsername(username));
-    }
+//    @Override
+//    public ResponseUtil<List<PolicyResultView>> getCollection(String username) {
+//        EnquirerEntity enquirerEntities = enquirerRepository.findEnquirerEntityByUsername(username);
+//        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+//        System.out.println(enquirerEntities.getId());
+//        EnquirerEntity enquirer = enquirerRepository.getReferenceById(2);
+//
+//        System.out.println(enquirer.getCollection());
+//        System.out.println(enquirerEntities.getCollection());
+//        List<PolicyEntity> policyEntities = enquirerEntities.getCollection();
+////        List<PolicyResultView> policyResultViews = policyEntities.stream()
+////                .map(policyResultView -> new PolicyResultView(policyEntities.(),policyEntities.getPolicyTitle()));
+////
+//        List<PolicyResultView> policyResultViews = policyEntities.stream()
+//                .map(e ->
+//                    new PolicyResultView(
+//                            e.getPolicyId(),
+//                            e.getPolicyTitle(),
+//                            e.getPubTime()
+//                            )
+//                ).collect(Collectors.toList());
+//        return ResponseUtil.success(policyResultViews);
+//    }
 
     @Override
     public ResponseUtil<?> getInfo(String username) {

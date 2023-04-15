@@ -7,6 +7,7 @@ import stackoverflow.project.policyretrieval.entity.PolicyEntity;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
 import stackoverflow.project.policyretrieval.view.LoginRequestView;
+import stackoverflow.project.policyretrieval.view.PolicyResultView;
 
 import java.util.List;
 
@@ -24,11 +25,9 @@ public interface EnquirerService {
 
     ResponseUtil<String> addHistory(int enquirerId, int recordId);
 
-    ResponseUtil<String> addCollection(int enquirerId, int policyId);
+//    ResponseUtil<String> addCollection(int enquirerId, int policyId);
 
-    ResponseUtil<List<PolicyEntity>> getHistory(String username);
-
-    ResponseUtil<List<PolicyEntity>> getCollection(String username);
+//    ResponseUtil<List<PolicyResultView>> getCollection(String username);
 
     ResponseUtil<?> getInfo(String username);
 

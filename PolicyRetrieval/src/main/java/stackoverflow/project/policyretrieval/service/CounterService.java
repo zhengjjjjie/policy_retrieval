@@ -15,10 +15,7 @@ public interface CounterService {
     public ResponseUtil<List<PolicyResultView>> getHotPolicies(Integer Size) throws IOException;
 
     //聚合查询, 某记录点击量
-    //TODO
     public ResponseUtil<Integer> getClicks(String policy_id);
-
-    public ResponseUtil<Page<PolicyResultView>> getHistory(String uid, Pageable page);
 
     //构建用户画像
     public ResponseUtil<String> resetPrefer();

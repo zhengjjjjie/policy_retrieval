@@ -32,9 +32,6 @@ public class CounterController {
 
     @Autowired
     private CounterService counterService;
-    private HistoryService historyService;
-
-    private PolicyService policyService;
 
     private final int SizeOfPage = 15;
 
@@ -60,11 +57,6 @@ public class CounterController {
     }
 
     //以下接口弃用! 请使用api/user/history/search/{pageNo}
-    @GetMapping("/get/history/{uid}/{pageNo}")
-    public ResponseUtil<Page<PolicyResultView>> getHistory(@PathVariable("uid") String uid,
-                                                           @PathVariable("pageNo") int pageNo) {
-        Pageable page = PageRequest.of(pageNo, SizeOfPage);
-        return counterService.getHistory(uid, page);
-    }
+
 
 }

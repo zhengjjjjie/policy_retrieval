@@ -128,11 +128,6 @@ public class CounterServiceImpl implements CounterService {
         return null;
     }
 
-    @Override
-    public ResponseUtil<Page<PolicyResultView>> getHistory(String uid, Pageable page) {
-        // 根据用户id查询历史记录
-        return null;
-    }
 
     @Override
     public ResponseUtil<String> resetPrefer() {

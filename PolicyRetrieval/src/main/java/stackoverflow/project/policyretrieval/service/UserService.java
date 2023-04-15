@@ -36,9 +36,9 @@ public class UserService {
 
             // 设置cookie
             Cookie cookie = new Cookie("user", user.getUsername());
+            cookie.setHttpOnly(false);
             cookie.setMaxAge(60 * 60 * 24 * 7);
             response.addCookie(cookie);
-
             return ResponseUtil.success(user);
         } else {
             return ResponseUtil.fail();

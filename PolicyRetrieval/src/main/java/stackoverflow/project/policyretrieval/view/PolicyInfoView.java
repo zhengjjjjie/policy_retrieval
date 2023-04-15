@@ -3,6 +3,7 @@ package stackoverflow.project.policyretrieval.view;
 /*
     description: 详情页
  */
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -15,6 +16,7 @@ public class PolicyInfoView {
     private String policyTitle;
     @Field(name = "UPDATEDATE",type = FieldType.Date,format = {},
             pattern = "yyyy-MM-dd HH:mm:ss || yyyy-MM-dd'T'HH:mm:ss'+08:00' || strict_date_optional_time || epoch_millis")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date pubTime;
     private String pubAgencyFullName;
     private String policyType;
