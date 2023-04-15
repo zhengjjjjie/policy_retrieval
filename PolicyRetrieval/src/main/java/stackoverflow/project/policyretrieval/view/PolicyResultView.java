@@ -1,6 +1,11 @@
 package stackoverflow.project.policyretrieval.view;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import java.util.Date;
 
 
 /*
@@ -10,10 +15,11 @@ import lombok.Data;
 public class PolicyResultView{
      private String policyId;
      private String policyTitle;
-     private String pubTime;
+     @JsonFormat(pattern = "yyyy-MM-dd")
+     private Date pubTime;
 
      public PolicyResultView(){}
-     public PolicyResultView(String policyId, String policyTitle, String pubTime) {
+     public PolicyResultView(String policyId, String policyTitle, Date pubTime) {
           this.policyTitle = policyTitle;
           this.policyId = policyId;
           this.pubTime = pubTime;

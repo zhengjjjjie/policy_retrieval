@@ -12,43 +12,63 @@ import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.CounterEntity;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
-import stackoverflow.project.policyretrieval.repository.ESCounterRepository;
-import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
+import stackoverflow.project.policyretrieval.entity.HistoryEntity;
+import stackoverflow.project.policyretrieval.entity.PreferenceEntity;
+import stackoverflow.project.policyretrieval.repository.*;
 import stackoverflow.project.policyretrieval.service.CounterService;
+import stackoverflow.project.policyretrieval.service.HistoryService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
+import stackoverflow.project.policyretrieval.view.HistoryView;
 import stackoverflow.project.policyretrieval.view.PolicyResultView;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import org.springframework.data.domain.Pageable;
 
 @Service
+@EnableScheduling
 public class CounterServiceImpl implements CounterService {
 
     private final ESCounterRepository esCounterRepository;
     private final ESPolicyRepository esPolicyRepository;
+    private final HistoryRepository historyRepository;
+    private final PreferRepository preferRepository;
+
     @Autowired
     private RestHighLevelClient client;
-    public CounterServiceImpl(ESCounterRepository esCounterRepository, ESPolicyRepository esPolicyRepository) {
+    public CounterServiceImpl(ESCounterRepository esCounterRepository, ESPolicyRepository esPolicyRepository, HistoryService historyService, HistoryRepository historyRepository, PreferRepository preferRepository, PolicyRepository policyRepository) {
         this.esCounterRepository = esCounterRepository;
         this.esPolicyRepository = esPolicyRepository;
+        this.historyRepository = historyRepository;
+        this.preferRepository = preferRepository;
     }
 
     @Override
     public ResponseUtil<String> addRecord(String uid, String pid) {
         // 创建记录
         final CounterEntity counterEntity = new CounterEntity();
+        HistoryEntity historyEntity = new HistoryEntity();
+
         counterEntity.setPolicyId(pid);
         counterEntity.setUserId(uid);
+
+        historyEntity.setUserName(counterEntity.getUserId());
+        historyEntity.setPolicyId(counterEntity.getPolicyId());
         // 获取当前时间
-        Date date = new Date();
+        Date date = new Date(new Date().getTime() + 28800000);
         counterEntity.setClickTime(date);
-        //保存
+        historyEntity.setClickTime(date);
+
+        //save
         esCounterRepository.save(counterEntity);
+        historyRepository.save(historyEntity);
+
         return ResponseUtil.successMessage("保存记录");
     }
 
@@ -76,13 +96,6 @@ public class CounterServiceImpl implements CounterService {
                                 .terms(terms_inner)
                                 .field(field_inner)
                                 .size(Size));
-//        TermsAggregationBuilder termsAggregationBuilder = AggregationBuilders
-//                .terms("")
-//                .field("policyid")
-//                .size(Size)
-//                .subAggregation(AggregationBuilders.dateHistogram("")
-//                        .field(field_outer)
-//                        .calendarInterval(DateHistogramInterval.WEEK));
         searchSourceBuilder.aggregation(dateHistogramAggregationBuilder);
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
@@ -107,103 +120,199 @@ public class CounterServiceImpl implements CounterService {
                 policyResultViews.add(pv);
             }
         }
-//        JSONObject jsonObject = JSON.parseObject(JSON.toJSONString(policy));
-//        JSONArray buckets = jsonObject.getJSONArray("buckets");
-//        System.out.println("########################");
-//        for (Object bucks : buckets) {
-//            JSONObject buck = (JSONObject)bucks;
-//            String keyAsString = buck.getString("keyAsString");
-//            String docCount = buck.getString("docCount");
-//            System.out.println(keyAsString + "\t-->\t"+docCount);
-//        }
-//        Terms terms = policy.get("date_histogram");
-//        for (Terms.Bucket bucket : terms.getBuckets()) {
-//            String bucketKey = bucket.getKeyAsString();
-//            System.out.println("termsKey=" + bucketKey);
-//            Sum sum = bucket.getAggregations().get("group_by_id");
-//            String key = sum.getName();
-//            double sumVal = sum.getValue();
-//            System.out.println("key=" + key + ",count=" + sumVal);
-//        }
-
-        // 用@Query的方式行不通
-//
-////        SearchRequest searchRequest = new SearchRequest("datehistogram");
-//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-//        String aggName = "popular_policy";
-//        //时间聚合
-////        DateHistogramAggregationBuilder dateHistogramAggregationBuilder =
-////                AggregationBuilders.dateHistogram(aggName)
-////                        .field("clicktime")
-////                        .calendarInterval(DateHistogramInterval.WEEK);
-//        //桶聚合
-//        DateHistogramAggregationBuilder dateHistogramAggregationBuilder =
-//                AggregationBuilders.dateHistogram(aggName)
-//                        .field("clicktime")
-//                        .calendarInterval(DateHistogramInterval.WEEK)
-//                        .subAggregation(AggregationBuilders
-//                                .terms("group_by_policy")
-//                                .field("policy")
-//                                .size(Size));
-//        TermsAggregationBuilder termsAggregationBuilder = AggregationBuilders
-//                .terms("group_by_policy")
-//                .field("policyid")
-//                .size(Size)
-//                .subAggregation(AggregationBuilders.dateHistogram(aggName)
-//                        .field("clicktime")
-//                        .calendarInterval(DateHistogramInterval.WEEK));
-////        termsAggregationBuilder.subAggregation(termsAggregationBuilder);
-//        //添加聚合
-//        searchSourceBuilder.aggregation(dateHistogramAggregationBuilder);
-//        //设置查询请求
-//        searchRequest.source(searchSourceBuilder);
-//        // 执行查询
-//        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-//        //获取搜索的结果集
-//        SearchHits searchHits = searchResponse.getHits();
-//        Aggregations aggregations = searchResponse.getAggregations();
-//        ParsedDateHistogram terms = aggregations.get(aggName);
-//        List<? extends Histogram.Bucket> buckets = terms.getBuckets();
-//        HashMap<String,Long> resultMap = new HashMap<>();
-//        buckets.forEach(bucket -> {
-//            resultMap.put(bucket.getKeyAsString(),bucket.getDocCount());
-//        });
-//        System.out.println("#####################"+buckets.size());
-//
-////        Terms terms1 = aggregations.get(aggName);
-////        for (Terms.Bucket bucket : terms1.getBuckets()) {
-////            String bucketKey = bucket.getKeyAsString();
-////            System.out.println("termsKey="+bucketKey);
-////        }
-//        System.out.println(resultMap);
-//        for (SearchHit searchHit : searchHits) {
-//            String index = searchHit.getIndex();//获取索引名称
-//            String id = searchHit.getId(); //文档id
-//            Float score = searchHit.getScore();
-//            String source = searchHit.getSourceAsString()
-//                    .replace("{\"_class\":\"stackoverflow.project.policyretrieval.entity.CounterEntity\",","")
-//                    .replace("}","");//文档内容
-//
-//            System.out.println(index);
-//
-//        }
-//        List<String> test = esCounterRepository.getHotPolicies(0, Size);
-//        System.out.println(test);
-//        List<CounterEntity> counterEntities = null;
-//        List<PolicyResultView> policyResultViews = new ArrayList<>();
-//        for (CounterEntity ce : counterEntities) {
-//            ESPolicyEntity es = esPolicyRepository.findByPolicyId(ce.getPolicyId());
-//            PolicyResultView prv = new PolicyResultView();
-//            prv.setPolicyId(es.getPolicyId());
-//            prv.setPolicyTitle(es.getPolicyTitle());
-//            prv.setPubTime(es.getPubTime());
-//            policyResultViews.add(prv);
-//        }
         return ResponseUtil.success(policyResultViews);
     }
-
+    //TODO
     @Override
     public ResponseUtil<Integer> getClicks(String policy_id) {
         return null;
+    }
+
+
+    @Override
+    public ResponseUtil<String> resetPrefer() {
+        // 这里有笨蛋, 写得好烂
+        // 根据用户的行为习惯, 重建搜索优化查询表
+        //首先得到所有用户的uid
+        List<String> users = historyRepository.searchAllUser();
+        // 遍历所有用户, 构建用户画像
+        for( String s : users) {
+            System.out.println(s);
+            Map<String, Integer> provinces = new HashMap<>();
+            int i_p = 0;
+            Map<String, Integer> types = new HashMap<>();
+            int i_t = 0;
+            Map<String, Integer> sources = new HashMap<>();
+            int i_s = 0;
+
+            //得到所有政策的条目
+            List<HistoryEntity> polies = historyRepository.findByUserName(s);
+            for (HistoryEntity e : polies) {
+                ESPolicyEntity policy = esPolicyRepository.findByPolicyId(e.getPolicyId());
+                String province = policy.getProvince();
+                String type = policy.getPolicyType();
+                String source = policy.getPolicySource();
+                if (!province.equals("")) {
+                    i_p++;
+                    if (provinces.containsKey(province)) {
+                        provinces.put(province, provinces.get(province)+1);
+                    }
+                    else {
+                        provinces.put(province,1);
+                    }
+                }
+                if (!type.equals("")) {
+                    i_t++;
+                    if (types.containsKey(type)) {
+                        types.put(type, types.get(type)+1);
+                    }
+                    else {
+                        types.put(type,1);
+                    }
+                }
+                if (!source.equals("")) {
+                    i_s++;
+                    if (sources.containsKey(source)) {
+                        sources.put(province, sources.get(province)+1);
+                    }
+                    else {
+                        sources.put(province,1);
+                    }
+                }
+            }
+            String maxPro = null;
+            String maxType = null;
+            String maxSorc = null;
+            for (String key : provinces.keySet()) {
+                if (maxPro == null || provinces.get(key) > provinces.get(maxPro)) {
+                    maxPro = key;
+                }
+            }
+            for (String key : types.keySet()) {
+                if (maxType == null || types.get(key) > types.get(maxType)) {
+                    maxType = key;
+                }
+            }
+            for (String key : sources.keySet()) {
+                if (maxSorc == null || sources.get(key) > sources.get(maxSorc)) {
+                    maxSorc = key;
+                }
+            }
+            PreferenceEntity preferenceEntity = new PreferenceEntity();
+            preferenceEntity.setUsername(s);
+
+            if (maxPro != null) {
+                preferenceEntity.setProvince(maxPro);
+                preferenceEntity.setProvinceWeight(Double.valueOf(provinces.get(maxPro)) / ((double) i_p));
+            }
+            if (maxType != null) {
+                preferenceEntity.setType(maxType);
+                preferenceEntity.setTypeWeight(Double.valueOf(types.get(maxType)) / ((double) i_t));
+            }
+            if (maxSorc != null) {
+                preferenceEntity.setSource(maxSorc);
+                preferenceEntity.setSourceWeight(Double.valueOf(sources.get(maxSorc)) / ((double) i_s));
+            }
+            if (preferRepository.existsByUsername(s)) {
+                //如果已经存在, 那么更新覆盖
+                preferenceEntity.setId(preferRepository.findByUsername(s).getId());
+            }
+            // to save user
+            preferRepository.save(preferenceEntity);
+        }//end of user loop
+        return ResponseUtil.successMessage("执行完毕");
+    }
+
+    @Scheduled(cron = "0 0 0/1 * * ?")
+    public void task() {
+        System.out.println("执行定时任务: 构建用户画像");
+        // 这里有笨蛋, 写得好烂
+        // 根据用户的行为习惯, 重建搜索优化查询表
+        //首先得到所有用户的uid
+        List<String> users = historyRepository.searchAllUser();
+        // 遍历所有用户, 构建用户画像
+        for( String s : users) {
+            Map<String, Integer> provinces = new HashMap<>();
+            int i_p = 0;
+            Map<String, Integer> types = new HashMap<>();
+            int i_t = 0;
+            Map<String, Integer> sources = new HashMap<>();
+            int i_s = 0;
+
+            //得到所有政策的条目
+            List<HistoryEntity> polies = historyRepository.findByUserName(s);
+            for (HistoryEntity e : polies) {
+                ESPolicyEntity policy = esPolicyRepository.findByPolicyId(e.getPolicyId());
+                String province = policy.getProvince();
+                String type = policy.getPolicyType();
+                String source = policy.getPolicySource();
+                if (!province.equals("")) {
+                    i_p++;
+                    if (provinces.containsKey(province)) {
+                        provinces.put(province, provinces.get(province)+1);
+                    }
+                    else {
+                        provinces.put(province,1);
+                    }
+                }
+                if (!type.equals("")) {
+                    i_t++;
+                    if (types.containsKey(type)) {
+                        types.put(type, types.get(type)+1);
+                    }
+                    else {
+                        types.put(type,1);
+                    }
+                }
+                if (!source.equals("")) {
+                    i_s++;
+                    if (sources.containsKey(source)) {
+                        sources.put(province, sources.get(province)+1);
+                    }
+                    else {
+                        sources.put(province,1);
+                    }
+                }
+            }
+            String maxPro = null;
+            String maxType = null;
+            String maxSorc = null;
+            for (String key : provinces.keySet()) {
+                if (maxPro == null || provinces.get(key) > provinces.get(maxPro)) {
+                    maxPro = key;
+                }
+            }
+            for (String key : types.keySet()) {
+                if (maxType == null || types.get(key) > types.get(maxType)) {
+                    maxType = key;
+                }
+            }
+            for (String key : sources.keySet()) {
+                if (maxSorc == null || sources.get(key) > sources.get(maxSorc)) {
+                    maxSorc = key;
+                }
+            }
+            PreferenceEntity preferenceEntity = new PreferenceEntity();
+            preferenceEntity.setUsername(s);
+
+            if (maxPro != null) {
+                preferenceEntity.setProvince(maxPro);
+                preferenceEntity.setProvinceWeight(Double.valueOf(provinces.get(maxPro)) / ((double) i_p));
+            }
+            if (maxType != null) {
+                preferenceEntity.setType(maxType);
+                preferenceEntity.setTypeWeight(Double.valueOf(types.get(maxType)) / ((double) i_t));
+            }
+            if (maxSorc != null) {
+                preferenceEntity.setSource(maxSorc);
+                preferenceEntity.setSourceWeight(Double.valueOf(sources.get(maxSorc)) / ((double) i_s));
+            }
+            if (preferRepository.existsByUsername(s)) {
+                //如果已经存在, 那么更新覆盖
+                preferenceEntity.setId(preferRepository.findByUsername(s).getId());
+            }
+            // to save user
+            preferRepository.save(preferenceEntity);
+        }//end of user loop
     }
 }

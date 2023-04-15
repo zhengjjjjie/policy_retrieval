@@ -3,11 +3,9 @@ package stackoverflow.project.policyretrieval.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.service.HistoryService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.HistoryView;
@@ -23,16 +21,6 @@ public class UserController {
     @Autowired
     private HistoryService historyService;
 
+    //根据用户返回历史记录
 
-    @GetMapping ("/history/search")
-    public ResponseUtil<List<HistoryView>> loadSearch(Pageable pageable,@RequestBody String username) {
-//        Pageable page = PageRequest.of(0,10);
-        // 根据uid查询用户的所有记录q
-        return historyService.searchHistoryByUid(username, pageable);
-    }
-    @GetMapping("/test")
-    public ResponseUtil<Integer> test() {
-
-        return ResponseUtil.success(20);
-    }
 }
