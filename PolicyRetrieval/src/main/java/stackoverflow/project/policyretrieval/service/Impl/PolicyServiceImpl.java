@@ -167,6 +167,9 @@ public class PolicyServiceImpl implements PolicyService {
             weight = 0.0001;
         }
         String boost = String.format("%.2f",weight);
+        if (boost.equals("Infinity")) {
+            boost = "1";
+        }
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.searchByQuery(titles,notitles,
                 policyType, notPolicyType,
                 bodies,notePolicyBodies,

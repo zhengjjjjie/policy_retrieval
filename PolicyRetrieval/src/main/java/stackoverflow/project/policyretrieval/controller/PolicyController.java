@@ -31,6 +31,7 @@ public class PolicyController {
     @Autowired
     private PolicyService policyService;
 
+    private final int pageMax = 15;
     @PostMapping("/opr/add")
     public ResponseUtil<String> addPolicy(@RequestBody PolicyUploadView policy){
         return policyService.addPolicy(policy);
@@ -40,7 +41,7 @@ public class PolicyController {
     public ResponseUtil<Page<PolicyResultView>> searchByTitle(@PathVariable("pagNo") Integer pageNo,
                                                               @RequestBody List<String> Titles) {
         //根据 标题查询, 返回简略页
-        Pageable page = PageRequest.of(pageNo, 15);
+        Pageable page = PageRequest.of(pageNo, pageMax);
         return policyService.searchTitle(page, Titles);
     }
 
@@ -50,7 +51,7 @@ public class PolicyController {
     }
     @GetMapping("/search/all/{page}")
     public ResponseUtil<Page<ESPolicyEntity>> searchAll(@PathVariable("page") int page) {
-        Pageable pageable = PageRequest.of(page,15);
+        Pageable pageable = PageRequest.of(page,pageMax);
         return policyService.searchAll(pageable);
     }
     @PostMapping("/opr/update/title/{id}")
@@ -62,26 +63,19 @@ public class PolicyController {
     @GetMapping("/search/title/{keyword}/{page}")
     public ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
                                                                    @PathVariable("keyword") String keyword){
-        Pageable page = PageRequest.of(pageNo,15);
+        Pageable page = PageRequest.of(pageNo,pageMax);
         return policyService.searchByTitleKeyword(page, keyword);
     }
     @GetMapping("/search/body/{keyword}/{page}")
     public ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(@PathVariable("page") Integer pageNo,
                                                                    @PathVariable("keyword") String keyword){
-        Pageable page = PageRequest.of(pageNo,15);
+        Pageable page = PageRequest.of(pageNo,pageMax);
         return policyService.searchByBodyKeyword(page, keyword);
     }
-    // TODO: 2023/4/8 根据多条件查找
-
-    /*
-    约定:
-    多条件查询需要传递比较多的参数, 并且包含 AND 和 NOTs
-    所以我们需要类来实现这些参数的传输
-     */
     @PostMapping("/search/complex/{page}")
     public ResponseUtil<Page<PolicyResultView>> complexSearch(@PathVariable("page") Integer pageNo,
                                                             @RequestBody QueryView query) {
-        Pageable page = PageRequest.of(pageNo, 15);
+        Pageable page = PageRequest.of(pageNo, pageMax);
         //当用户访问详情页的时候, 记录其信息
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = sra.getRequest();
@@ -92,14 +86,14 @@ public class PolicyController {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        //推荐, 根据用户所在地区搜索
+        //推荐, 根据用户所在地区搜索t
         return policyService.searchQuery(query, address,page);
     }
-    @PostMapping("/smartsearch/{uid}/{page}")
+    @PostMapping("/search/smart/{uid}/{page}")
     public ResponseUtil<Page<PolicyResultView>> smartSearch(@PathVariable("page") Integer pageNo,
                                                             @PathVariable("uid") String uid,
                                                             @RequestBody QueryView query) {
-        Pageable page = PageRequest.of(pageNo, 15);
+        Pageable page = PageRequest.of(pageNo, pageMax);
         //当用户访问详情页的时候, 记录其信息
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = sra.getRequest();

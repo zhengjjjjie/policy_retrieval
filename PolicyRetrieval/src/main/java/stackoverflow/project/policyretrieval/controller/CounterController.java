@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
 import stackoverflow.project.policyretrieval.entity.HistoryEntity;
@@ -25,15 +27,11 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "*", maxAge = 7200)
 @RequestMapping("/api/counter")
 public class CounterController {
 
     @Autowired
     private CounterService counterService;
-    private HistoryService historyService;
-
-    private PolicyService policyService;
 
     private final int SizeOfPage = 15;
 
@@ -51,7 +49,6 @@ public class CounterController {
             Size = Max_item;
         }
         return counterService.getHotPolicies(Size);
-
     }
     // 更新用户偏好数据
     @GetMapping("/resetprefer")
@@ -60,11 +57,6 @@ public class CounterController {
     }
 
     //以下接口弃用! 请使用api/user/history/search/{pageNo}
-    @GetMapping("/get/history/{uid}/{pageNo}")
-    public ResponseUtil<Page<PolicyResultView>> getHistory(@PathVariable("uid") String uid,
-                                                           @PathVariable("pageNo") int pageNo) {
-        Pageable page = PageRequest.of(pageNo, SizeOfPage);
-        return counterService.getHistory(uid, page);
-    }
+
 
 }

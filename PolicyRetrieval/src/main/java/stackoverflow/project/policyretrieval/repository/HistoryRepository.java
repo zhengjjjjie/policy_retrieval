@@ -9,7 +9,6 @@ import java.util.List;
 
 
 public interface HistoryRepository extends JpaRepository<HistoryEntity,Integer> {
-//     @Query("SELECT * WHERE user_id =?0")
      List<HistoryEntity> findByUserName(String username, Pageable pageable);
 
      List<HistoryEntity> findByUserName(String username);
