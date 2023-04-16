@@ -22,20 +22,35 @@ public class QueryView {
         return Titles.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getNoTitles_str() {
-
-        return NotTitles.toString().replace("[", "").replace("]", "").replace(",","");
+        if (this.Titles == null) {
+            return "";
+        }else {
+            return NotTitles.toString().replace("[", "").replace("]", "").replace(",","");
+        }
     }
     public String getPolicyType_str() {
+        if (this.PolicyType == null) {
+            return "";
+        }
         return PolicyType.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getNotPolicyType_str() {
+        if (this.NotPolicyType == null) {
+            return "";
+        }
         return NotPolicyType.toString().replace("[", "").replace("]", "").replace(",","");
     }
 
     public String getPolicyBodies_str() {
+        if (this.Bodies  == null) {
+            return "";
+        }
         return Bodies.toString().replace("[", "").replace("]", "").replace(",","");
     }
     public String getNotPolicyBodies_str() {
+        if (this.NotBodies == null) {
+            return "";
+        }
         return NotBodies.toString().replace("[", "").replace("]", "").replace(",","");
     }
     //通用匹配符
