@@ -3,6 +3,10 @@ package stackoverflow.project.policyretrieval.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+
 import org.springframework.web.servlet.config.annotation.*;
 import stackoverflow.project.policyretrieval.interceptor.LoginInterceptor;
 
@@ -32,7 +36,9 @@ public class WebMvcConfigurer extends WebMvcConfigurationSupport {
                         .allowedOriginPatterns("*")
                         .allowCredentials(true)
                         .allowedMethods("GET", "POST", "DELETE", "PUT")
-//                        .exposedHeaders(HttpHeaders.CONTENT_DISPOSITION)
+
+                        .allowedHeaders("*")
+
                         .maxAge(3600);
 
         //允许哪些ip或域名可以跨域访问 *表示允许所以,不要写*，否则cookie就无法使用了(这里建议不要用 * ，*表示所以请求都允许跨域，安全部门请喝茶 )

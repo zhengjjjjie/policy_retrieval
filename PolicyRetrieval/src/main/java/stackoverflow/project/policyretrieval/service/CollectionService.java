@@ -23,9 +23,10 @@ public class CollectionService{
     @Autowired
     private EnquirerRepository enquirerRepository;
 
-
     public ResponseUtil<Page<CollectionView>> searchCollectionByUsername(String username, Pageable page) {
         Page<CollectionEntity> collectionEntities = collectionRepository.findByUserName(username,page);
+        System.out.println("######################");
+        System.out.println(collectionEntities.getSize());
         Page<CollectionView> collectionViews = convertPage(collectionEntities,CollectionView.class);
         return ResponseUtil.success(collectionViews);
     }
@@ -40,7 +41,24 @@ public class CollectionService{
         }
         collection.setPolicyId(policyId);
         collection.setUserName(username);
+        String title = esPolicyRepository.findByPolicyId(policyId).getPolicyTitle();
+        collection.setPolicyTitle(title);
         collectionRepository.save(collection);
+
+        return ResponseUtil.success("收藏成功");
+    }
+
+    public ResponseUtil<?> delCollection(String username, String policyId) {
+        CollectionEntity collection = new CollectionEntity();
+        if (!esPolicyRepository.existsByPolicyId(policyId)){
+            return ResponseUtil.failMessage("政策不存在");
+        }
+        if (!enquirerRepository.existsByUsername(username)) {
+            return ResponseUtil.failMessage("用户不存在");
+        }
+        collection.setPolicyId(policyId);
+        collection.setUserName(username);
+        collectionRepository.delete(collection);
 
         return ResponseUtil.success("收藏成功");
     }

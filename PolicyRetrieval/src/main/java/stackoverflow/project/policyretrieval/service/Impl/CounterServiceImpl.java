@@ -78,7 +78,6 @@ public class CounterServiceImpl implements CounterService {
 
         //重建
         List<PolicyResultView> policyResultViews = new ArrayList<>();
-
         String indices = "datehistogram";
         String terms_outer = "date_histogram";
         String field_outer = "clicktime";
@@ -112,6 +111,9 @@ public class CounterServiceImpl implements CounterService {
                 long subCount = subBucket.getDocCount();
 
                 //获取到文档的PolicyId 和 次数之后, 将返回PolicyResultView
+                if (!esPolicyRepository.existsByPolicyId(subKey)) {
+                    continue;
+                }
                 ESPolicyEntity esPolicyEntity = esPolicyRepository.findByPolicyId(subKey);
                 PolicyResultView pv = new PolicyResultView();
                 pv.setPolicyId(subKey);
