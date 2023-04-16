@@ -4,12 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
+
+import javax.transaction.Transactional;
 
 public interface ESPolicyRepository extends ElasticsearchRepository<ESPolicyEntity, String> {
     Page<ESPolicyEntity> findByPolicyTitle(Pageable pageable,String policy_title);
     ESPolicyEntity findByPolicyId(String id);
-
+    Integer deleteByPolicyId(String policyId);
     Page<ESPolicyEntity> findByPolicyTitleLike(String keyword, Pageable pageable);
 
     Page<ESPolicyEntity> findAll(Pageable pageable);

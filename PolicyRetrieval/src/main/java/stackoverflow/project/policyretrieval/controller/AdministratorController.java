@@ -15,11 +15,6 @@ public class AdministratorController {
     @Autowired
     private AdministratorService administratorService;
 
-//    @PostMapping("/login")
-//    public ResponseUtil<String> login(@RequestBody LoginRequestView loginRequestView){
-//        return administratorService.login(loginRequestView);
-//    }
-
     @PostMapping("/add")
     public ResponseUtil<String> addAdministrator(@RequestBody AdministratorEntity administratorEntity){
         return administratorService.add(administratorEntity);
