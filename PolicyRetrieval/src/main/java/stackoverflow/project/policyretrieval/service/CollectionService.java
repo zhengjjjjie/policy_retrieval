@@ -44,4 +44,19 @@ public class CollectionService{
 
         return ResponseUtil.success("收藏成功");
     }
+
+    public ResponseUtil<?> delCollection(String username, String policyId) {
+        CollectionEntity collection = new CollectionEntity();
+        if (!esPolicyRepository.existsByPolicyId(policyId)){
+            return ResponseUtil.failMessage("政策不存在");
+        }
+        if (!enquirerRepository.existsByUsername(username)) {
+            return ResponseUtil.failMessage("用户不存在");
+        }
+        collection.setPolicyId(policyId);
+        collection.setUserName(username);
+        collectionRepository.delete(collection);
+
+        return ResponseUtil.success("收藏成功");
+    }
 }

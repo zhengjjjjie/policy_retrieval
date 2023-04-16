@@ -55,8 +55,4 @@ public class CounterController {
     public ResponseUtil<String> resetPrefer() {
         return counterService.resetPrefer();
     }
-
-    //以下接口弃用! 请使用api/user/history/search/{pageNo}
-
-
 }
