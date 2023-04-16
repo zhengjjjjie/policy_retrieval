@@ -93,41 +93,6 @@ public class EnquirerServiceImpl implements EnquirerService {
         return ResponseUtil.successMessage("添加成功!");
     }
 
-//    @Override
-//    public ResponseUtil<String> addCollection(int enquirerId, int policyId) {
-//        EnquirerEntity enquirer = enquirerRepository.getReferenceById(enquirerId);
-////        List<PolicyEntity> collection = enquirer.getCollection();
-//        PolicyEntity policy = policyRepository.getReferenceById(policyId);
-//        collection.add(policy);
-////        enquirer.setHistory(collection);
-//        enquirerRepository.save(enquirer);
-//        return ResponseUtil.successMessage("添加成功!");
-//    }
-
-//    @Override
-//    public ResponseUtil<List<PolicyResultView>> getCollection(String username) {
-//        EnquirerEntity enquirerEntities = enquirerRepository.findEnquirerEntityByUsername(username);
-//        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-//        System.out.println(enquirerEntities.getId());
-//        EnquirerEntity enquirer = enquirerRepository.getReferenceById(2);
-//
-//        System.out.println(enquirer.getCollection());
-//        System.out.println(enquirerEntities.getCollection());
-//        List<PolicyEntity> policyEntities = enquirerEntities.getCollection();
-////        List<PolicyResultView> policyResultViews = policyEntities.stream()
-////                .map(policyResultView -> new PolicyResultView(policyEntities.(),policyEntities.getPolicyTitle()));
-////
-//        List<PolicyResultView> policyResultViews = policyEntities.stream()
-//                .map(e ->
-//                    new PolicyResultView(
-//                            e.getPolicyId(),
-//                            e.getPolicyTitle(),
-//                            e.getPubTime()
-//                            )
-//                ).collect(Collectors.toList());
-//        return ResponseUtil.success(policyResultViews);
-//    }
-
     @Override
     public ResponseUtil<?> getInfo(String username) {
         if(enquirerRepository.findEnquirerEntityByUsername(username) == null){

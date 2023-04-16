@@ -14,12 +14,16 @@ import java.util.Date;
 @Table(name = "collection")
 public class CollectionEntity {
     @Id
-    @JoinColumn(name = "history_username", referencedColumnName="username",nullable = false)
+    @JoinColumn(name = "username", referencedColumnName="username",nullable = false)
     private String userName;
 
     @Id
-    @JoinColumn(name = "history_policyId",referencedColumnName="POLICYID", nullable = false)
+    @JoinColumn(name = "policyId",referencedColumnName="POLICYID", nullable = false)
     private String policyId;
+
+    @Id
+    @JoinColumn(name = "policytitle")
+    private String policyTitle;
 
     public CollectionEntity(){}
 

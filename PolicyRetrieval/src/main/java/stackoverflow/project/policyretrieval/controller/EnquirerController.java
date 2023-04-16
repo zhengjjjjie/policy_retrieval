@@ -9,6 +9,7 @@ import stackoverflow.project.policyretrieval.entity.EnquirerEntity;
 import stackoverflow.project.policyretrieval.service.CollectionService;
 import stackoverflow.project.policyretrieval.service.EnquirerService;
 import stackoverflow.project.policyretrieval.service.HistoryService;
+import stackoverflow.project.policyretrieval.service.PolicyService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.CollectionView;
 import stackoverflow.project.policyretrieval.view.EnquirerRequestView;
@@ -26,6 +27,8 @@ public class EnquirerController {
     private HistoryService historyService;
     @Autowired
     private CollectionService collectionService;
+
+
 
     private final int SizeOfPage = 15;
     @GetMapping("/get/info/{username}")
@@ -65,11 +68,11 @@ public class EnquirerController {
         return historyService.searchHistoryByUid(username, page);
     }
     @GetMapping("/get/collection/{uid}/{pageNo}")
-    public ResponseUtil<Page<CollectionView>> getCollectionByUsername(Pageable pageable,
-                                                                      @PathVariable("pageNo") Integer pageNo,
+    public ResponseUtil<Page<CollectionView>> getCollectionByUsername(@PathVariable("pageNo") Integer pageNo,
                                                                       @PathVariable("uid") String username) {
         //每页返回30条记录
         Pageable page = PageRequest.of(pageNo, SizeOfPage);
+
         return collectionService.searchCollectionByUsername(username, page);
     }
 

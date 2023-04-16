@@ -11,6 +11,7 @@ import java.util.Date;
 public class CollectionId implements Serializable {
     private String userName;
     private String policyId;
+    private String policyTitle;
     public CollectionId() {
     }
 }
