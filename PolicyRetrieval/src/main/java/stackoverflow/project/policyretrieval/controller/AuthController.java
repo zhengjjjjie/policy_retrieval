@@ -8,6 +8,7 @@ import stackoverflow.project.policyretrieval.entity.UserEntity;
 import stackoverflow.project.policyretrieval.service.UserService;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.LoginRequestView;
+import stackoverflow.project.policyretrieval.view.UserRegisterView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,8 @@ public class AuthController {
         return ResponseUtil.success();
     }
     @PostMapping("/register")
-    public ResponseUtil<?> register(@RequestBody LoginRequestView loginRequestView) {
-        return userService.register(loginRequestView.getUsername(), loginRequestView.getPassword());
+    public ResponseUtil<?> register(@RequestBody UserRegisterView userRegisterView) {
+
+        return userService.register(userRegisterView);
     }
 }

@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface PolicyService {
+
+    ResponseUtil<?> updatePolicy(PolicyUploadView policyInfoView);
     public ResponseUtil<String> addPolicy(PolicyUploadView policy);
     public ResponseUtil<Page<PolicyResultView>> searchTitle(Pageable pageable, List<String> keyword);
     public ResponseUtil<PolicyInfoView> searchByPolicyId(String id);
@@ -36,5 +38,7 @@ public interface PolicyService {
     boolean existsByPolicyId(String policyId);
     
     ResponseUtil<Page<PolicyResultView>> searchByBodyKeyword(Pageable page, String keyword);
+
+    ResponseUtil<?> deletePolicyByPolicyId(String policyId);
 
 }

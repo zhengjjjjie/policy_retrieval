@@ -5,4 +5,5 @@ import stackoverflow.project.policyretrieval.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     UserEntity findByUsername(String username);
+    boolean existsByUsername(String username);
 }

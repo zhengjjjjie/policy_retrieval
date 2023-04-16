@@ -3,6 +3,7 @@ package stackoverflow.project.policyretrieval.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import stackoverflow.project.policyretrieval.entity.CollectionEntity;
 import stackoverflow.project.policyretrieval.repository.CollectionRepository;
@@ -10,6 +11,8 @@ import stackoverflow.project.policyretrieval.repository.ESPolicyRepository;
 import stackoverflow.project.policyretrieval.repository.EnquirerRepository;
 import stackoverflow.project.policyretrieval.util.ResponseUtil;
 import stackoverflow.project.policyretrieval.view.CollectionView;
+
+import javax.transaction.Transactional;
 
 import static stackoverflow.project.policyretrieval.util.ConvertPageUtil.convertPage;
 
@@ -25,7 +28,6 @@ public class CollectionService{
 
     public ResponseUtil<Page<CollectionView>> searchCollectionByUsername(String username, Pageable page) {
         Page<CollectionEntity> collectionEntities = collectionRepository.findByUserName(username,page);
-        System.out.println("######################");
         System.out.println(collectionEntities.getSize());
         Page<CollectionView> collectionViews = convertPage(collectionEntities,CollectionView.class);
         return ResponseUtil.success(collectionViews);
