@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import stackoverflow.project.policyretrieval.entity.ESPolicyEntity;
@@ -19,6 +20,7 @@ import stackoverflow.project.policyretrieval.view.PolicyResultView;
 import stackoverflow.project.policyretrieval.view.PolicyUploadView;
 import stackoverflow.project.policyretrieval.view.QueryView;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,45 @@ public class PolicyServiceImpl implements PolicyService {
         this.transactionTemplate = transactionTemplate;
 
     }
+    @Override
+    @Modifying
+    @Transactional
+    public ResponseUtil<?> updatePolicy(PolicyUploadView policyUploadView) {
+
+        if (! esPolicyRepository.existsByPolicyId(policyUploadView.getPolicyId())) {
+            return ResponseUtil.failMessage("政策不存在, 无法更新");
+        }
+        // 检查规则
+        policyRepository.deleteByPolicyId(policyUploadView.getPolicyId());
+        if (policyUploadView.getPolicyId().equals("") || policyUploadView.getPolicyTitle().equals("") || (policyUploadView.getPubTime() == null)) {
+            return ResponseUtil.failMessage("PolicyId, policyTitle, pubTime不能为空");
+        }
+
+        PolicyEntity policy = new PolicyEntity();
+        BeanUtils.copyProperties(policyUploadView, policy);
+        Date date = new Date(new Date().getTime() + 28800000);
+        policy.setUpdateDate(date);
+        // 先删后加
+        esPolicyRepository.deleteByPolicyId(policy.getPolicyId());
+        policyRepository.deleteByPolicyId(policy.getPolicyId());
+        //save
+        // 实现事物控制, 无状态且线性安全
+        final PolicyEntity savePolicy = transactionTemplate.execute(status ->
+                policyRepository.save(policy)
+        );
+        final ESPolicyEntity esPolicy = new ESPolicyEntity();
+        assert savePolicy != null;
+        BeanUtils.copyProperties(savePolicy,esPolicy);
+        esPolicy.setId(savePolicy.getId());
+        // try to save in es
+        try {
+            esPolicyRepository.save(esPolicy);
+        } catch (Exception e) {
+            log.error(String.format("ERROR: can not to save ESPolicy %s",e.getMessage()));
+        }
+        return ResponseUtil.successMessage("添加成功！");
+    }
+
     @Override
     public ResponseUtil<String> addPolicy(PolicyUploadView policyUploadView) {
         // 规则性检查
@@ -81,8 +122,6 @@ public class PolicyServiceImpl implements PolicyService {
         assert savePolicy != null;
         BeanUtils.copyProperties(savePolicy,esPolicy);
         esPolicy.setId(savePolicy.getId());
-        System.out.println(esPolicy.getPolicyId());
-        System.out.println(esPolicy.getPolicyTitle());
         // try to save in es
         try {
             esPolicyRepository.save(esPolicy);
@@ -212,5 +251,21 @@ public class PolicyServiceImpl implements PolicyService {
         Page<ESPolicyEntity> esPolicyEntities = esPolicyRepository.findByPolicyBodyLike(keyword, page);
         Page<PolicyResultView> policyInfoViews = convertPage(esPolicyEntities, PolicyResultView.class);
         return ResponseUtil.success(policyInfoViews);
+    }
+
+    @Override
+    @Transactional
+    public ResponseUtil<?> deletePolicyByPolicyId(String policyId) {
+        if (! esPolicyRepository.existsByPolicyId(policyId)) {
+            return ResponseUtil.success("没有该政策, 无法删除");
+        }
+        policyRepository.deleteByPolicyId(policyId);
+        esPolicyRepository.deleteByPolicyId(policyId);
+        if (esPolicyRepository.existsByPolicyId(policyId)) {
+            return ResponseUtil.failMessage("数据库删除失败");
+        } else {
+            return ResponseUtil.success("删除成功");
+
+        }
     }
 }

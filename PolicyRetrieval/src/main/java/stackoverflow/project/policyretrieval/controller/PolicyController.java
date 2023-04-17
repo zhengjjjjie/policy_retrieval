@@ -59,6 +59,10 @@ public class PolicyController {
                                             @RequestBody String title) {
         return policyService.updateTitle(id, title);
     }
+    @PostMapping("/opr/update")
+    public ResponseUtil<?> updatePolicy(@RequestBody PolicyUploadView policy) {
+        return policyService.updatePolicy(policy);
+    }
 
     @GetMapping("/search/title/{keyword}/{page}")
     public ResponseUtil<Page<PolicyResultView>> searchByTitleKeyword(@PathVariable("page") Integer pageNo,
@@ -107,4 +111,13 @@ public class PolicyController {
         //个性化推荐
         return policyService.smartQuery(query, address,uid, page);
     }
+    @GetMapping("/del/{policyId}")
+    public ResponseUtil<?> delPolicyByPolicyId(@PathVariable("policyId") String policyId ) {
+        if (! policyService.existsByPolicyId(policyId)) {
+            return ResponseUtil.failMessage("政策ID不存在, 请重新输入");
+        }
+        policyService.deletePolicyByPolicyId(policyId);
+        return ResponseUtil.success("删除成功");
+    }
+
 }

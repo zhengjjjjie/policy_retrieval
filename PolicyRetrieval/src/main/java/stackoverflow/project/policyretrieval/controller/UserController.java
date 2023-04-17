@@ -18,9 +18,4 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private HistoryService historyService;
-
-    //根据用户返回历史记录
-
 }
